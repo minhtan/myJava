@@ -5,6 +5,9 @@ public class Cat extends Animal{
 		this.dogTRef = dogT;
 	}
 	public void letOut(){
+		//synchornized method test
+		// Meow.meow();
+
 		try{
 			for(int i=0; i<10; i++){
 
@@ -14,9 +17,9 @@ public class Cat extends Animal{
 				// }
 
 				//join test
-				if(i==4){
-					this.dogTRef.join();
-				}
+				// if(i==4){
+				// 	this.dogTRef.join();
+				// }
 
 				//wait test
 				// if(i==6){ 

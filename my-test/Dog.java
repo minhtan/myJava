@@ -3,8 +3,10 @@ public class Dog extends Animal{
 		super(name, delay);
 	}
 	public void letOut(){
+		//synchornized method test
+		// Meow.meow();
+		
 		try{
-
 			for(int i=0; i<10; i++){
 				System.out.println("who let the " + this.name + " out");
 				Thread.sleep(this.delay);
