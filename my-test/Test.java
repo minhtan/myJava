@@ -1,10 +1,17 @@
 public class Test{
-	public static void main(String[] args){;
-		Animal cat = new Cat("cat", 1000);
-		Animal dog = new Dog("dog", 1500);
+	public static Object lock = new Object();
+	public static void main(String[] args){
+		Runnable dog = new Dog("dog", 200);
+		Thread dogT = new Thread(dog);
 
-		cat.start();
-		dog.start();
+		Runnable cat = new Cat("cat", 100, dogT);
+		Thread catT = new Thread(cat);
+
+		catT.start();
+		dogT.start();
 	}
 }
+/*
+Note that every sleep, wait, join method should be surrounded be try-catch block for interrupted exception 
+*/
 
