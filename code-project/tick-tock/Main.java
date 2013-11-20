@@ -12,36 +12,38 @@ public class Main{
 
 class Tick implements Runnable{
 	public void tick(){
-		synchronized(Main.lock){
-			System.out.println("Tick");
-			try{
-				Thread.sleep(1000);
-				Main.lock.notify();
-				Main.lock.wait();
-			}catch(InterruptedException e){}
-		}
+		System.out.println("Tick");
 	}
 	public void run(){
-		while(true){
-			this.tick();
-		}
+		try{
+			while(true){		
+				this.tick();
+				Thread.sleep(1000);
+				synchronized(Main.lock){
+					Main.lock.notify();
+					Main.lock.wait();
+				}
+			}
+		}catch(InterruptedException e){}
 	}
 }
 
 class Tock implements Runnable{
 	public void tock(){
-		synchronized(Main.lock){
-			System.out.println("Tock");
-			try{
-				Thread.sleep(1000);
-				Main.lock.notify();
-				Main.lock.wait();
-			}catch(InterruptedException e){}
-		}
+		System.out.println("Tock");
 	}
 	public void run(){
-		while(true){
-			this.tock();
-		}
+		try{
+			while(true){
+				synchronized(Main.lock){
+					Main.lock.wait();
+				}
+				this.tock();
+				Thread.sleep(1000);
+				synchronized(Main.lock){	
+					Main.lock.notify();
+				}
+			}
+		}catch(InterruptedException e){}
 	}
 }
