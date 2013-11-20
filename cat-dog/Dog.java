@@ -8,12 +8,14 @@ public class Dog extends Animal{
 		
 		try{
 			for(int i=0; i<10; i++){
+				if(i==6){
+					synchronized (Test.lock){
+						Test.lock.notify();
+						Test.lock.wait();
+					}
+				}
 				System.out.println("who let the " + this.name + " out");
 				Thread.sleep(this.delay);
-			}
-
-			synchronized (Test.lock){
-				Test.lock.notify();
 			}
 			
 		}catch(InterruptedException e){

@@ -22,14 +22,17 @@ public class Cat extends Animal{
 				// }
 
 				//wait test
-				// if(i==6){ 
-				// 	synchronized(Test.lock){
-				// 		Test.lock.wait();
-				// 	}
-				// }
+				if(i==4){ 
+					synchronized(Test.lock){
+						Test.lock.wait();
+					}
+				}
 				
 				System.out.println("who let the " + this.name + " out");
 				Thread.sleep(this.delay);
+			}
+			synchronized(Test.lock){
+				Test.lock.notify();
 			}
 		}catch(InterruptedException e){
 			return;
