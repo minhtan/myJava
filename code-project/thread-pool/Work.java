@@ -1,10 +1,9 @@
 public class Work{
-	public void do(){
-		for (int i=1; i<=10; i++){
-			System.out.println("This is line: "+i);
-			try{
-				Thread.sleep(200);
-			}catch(InterruptedException e){}
-		}
+	public void doWork(){
+		System.out.println("This is a work, it will sleep for 2 sec");
+		try{
+			Thread.sleep(2000);
+		}catch(InterruptedException e){}
+		System.out.println("Done");
 	}
 }
