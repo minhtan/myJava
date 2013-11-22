@@ -12,7 +12,7 @@ public class ThreadPool implements Runnable{
 		}
 	}
 	public void run(){
-		Thread wT = new Thread(workerThread);
+		Thread wT = new Thread(this.workerThread);
 		wT.start();
 		for(int i=0; i<this.workList.length; i++){
 			this.workerThread.setWork(this.workList[i]);

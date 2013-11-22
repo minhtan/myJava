@@ -13,7 +13,6 @@ public class MyThread implements Runnable{
 				try{
 					this.tp.lock.wait();
 				}catch(InterruptedException e){}
-				
 			}
 			System.out.println("Thread start working");
 			this.work.doWork();
