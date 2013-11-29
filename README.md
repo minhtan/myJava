@@ -1,4 +1,4 @@
-thread
+My Java
 ======
 
-java thread test and example
+My personal java tests and examples
