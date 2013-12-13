@@ -1,55 +1,34 @@
-import java.io.*;
-import java.lang.*;
 import java.util.*;
 public class Catalog{
-	private Collection<Car> cars;
-	static Scanner sc = new Scanner(System.in);
+	private ArrayList<Car> cars;
+	private CatalogIO io;
+
+	public ArrayList<Car> getCars() {
+	    return this.cars;
+	}
+
+	public void setCars(ArrayList<Car> cars) {
+	    this.cars = cars;
+	}
+
 	public Catalog(){
-		this.cars = new ArrayList<Car>();
+		this.io = new CatalogIO();
+		this.cars = io.load();
 	}
-	public void addCar(){
-		Scanner sc = new Scanner(System.in);
-		System.out.print("Enter car's make: ");
-		String make = sc.nextLine();
 
-		System.out.print("Enter car's model: ");
-		String model = sc.nextLine();
-
-		System.out.print("Enter car's year: ");
-		int year = Integer.parseInt(sc.nextLine());
-
-		System.out.print("Enter car's price: ");
-		float price = Float.parseFloat(sc.nextLine());
-
-		this.cars.add(new Car(make, model, year, price));
+	public void addCar(String make, String model, int year, float price){
+		Car car = new Car(make, model, year, price);
+		this.cars.add(car);
+		this.io.save(car);
 	}
-	public void listCars(){
-		for (Car car : this.cars)
-    		System.out.println(
-    			car.getYear() + " " + 
-    			car.getMake() + " " +
-    			car.getModel() + " " + 
-    			car.getPrice() 
-    		);
-	}
-	public static void main(String[] args){
-		Catalog ctl = new Catalog();
-		boolean dk = true;
-		do{
-			System.out.print("Enter a command: ");
-			String choice = sc.nextLine();
-			switch(choice){
-				case "add":
-					ctl.addCar(); break;
-				case "list":
-					ctl.listCars(); break;
-				case "quit":
-					dk = false;
-					break;
-				default:
-					System.out.print("Invalid command! ");
-					break;
-			}
-		}while(dk);
+
+	public String listCar(Car car){
+		return ( 
+			this.cars.indexOf(car) + "|" +
+			car.getMake() + "|" + 
+			car.getModel() + "|" +
+			car.getYear() + "|" +
+			car.getPrice()
+		);
 	}
 }
