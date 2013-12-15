@@ -8,13 +8,20 @@ public class Console{
 		Console csl = new Console();
 		boolean loop = true;
 		do{
-			System.out.print("Enter a command: ");
+			System.out.print("Enter a command (type 'help' for information): ");
 			String choice = sc.nextLine();
 			switch(choice){
 				case "add":
 					csl.add(); break;
 				case "list":
 					csl.list(); break;
+				case "help":
+					System.out.println("\n");
+					System.out.println("list: list out all cars"); 
+					System.out.println("add : add a car");
+					System.out.println("quit: quit");
+					System.out.println("\n");
+					break;
 				case "quit":
 					loop = false;
 					break;
@@ -59,7 +66,7 @@ public class Console{
 	}
 
 	public void list(){
-		System.out.println("Car list:");
+		System.out.println("\nCar list:\n");
 		for (Car car : ctl.getCars()){
 			StringTokenizer st = new StringTokenizer(ctl.listCar(car), "|");
 			 	

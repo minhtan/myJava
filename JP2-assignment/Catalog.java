@@ -20,7 +20,7 @@ public class Catalog{
 	public void addCar(String make, String model, int year, float price){
 		Car car = new Car(make, model, year, price);
 		this.cars.add(car);
-		this.io.saveCar(car);
+		this.io.saveCar(this.cars);
 	}
 
 	public String listCar(Car car){
