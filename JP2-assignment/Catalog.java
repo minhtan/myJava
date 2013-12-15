@@ -12,14 +12,15 @@ public class Catalog{
 	}
 
 	public Catalog(){
+		// this.cars = new ArrayList<Car>();
 		this.io = new CatalogIO();
-		this.cars = io.load();
+		this.cars = this.io.loadCars();
 	}
 
 	public void addCar(String make, String model, int year, float price){
 		Car car = new Car(make, model, year, price);
 		this.cars.add(car);
-		this.io.save(car);
+		this.io.saveCar(car);
 	}
 
 	public String listCar(Car car){

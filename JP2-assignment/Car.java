@@ -1,4 +1,5 @@
-public class Car{
+import java.io.*;
+public class Car implements Serializable{
 	private String make;
 	private String model;
 	private int year;
