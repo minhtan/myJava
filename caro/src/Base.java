@@ -14,6 +14,11 @@ public class Base {
     public Base(int side){
         this.side = side;
         this.base = new int[side][side];
+        for(int r=0; r<side; r++){
+            for(int c=0; c<side; c++){
+                this.base[r][c] = 0;
+            }
+        }
     }
     
     public int getSide() {
@@ -26,9 +31,5 @@ public class Base {
 
     public int[][] getBase() {
         return base;
-    }
-
-    public void setBase(int[][] base) {
-        this.base = base;
     }
 }
