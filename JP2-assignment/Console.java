@@ -33,7 +33,6 @@ public class Console{
 	}
 
 	public void add() throws NumberFormatException{
-		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter car's make: ");
 		String make = sc.nextLine();
 
