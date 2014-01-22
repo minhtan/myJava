@@ -1,3 +1,5 @@
+package SwingInterface;
+
 import java.awt.*;
 import javax.swing.*;
 
