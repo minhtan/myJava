@@ -36,6 +36,4 @@ public class Data implements Serializable{
     public void setCol(int col) {
         this.col = col;
     }
-    
-    
 }
