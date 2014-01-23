@@ -36,7 +36,7 @@ public class MyFrame extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     
-    public static void main(String[] args) {
-        JFrame myFrame = new MyFrame();
-    }
+//    public static void main(String[] args) {
+//        JFrame myFrame = new MyFrame();
+//    }
 }

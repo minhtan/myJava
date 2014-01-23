@@ -80,7 +80,7 @@ public class NetworkController {
     
     public Data receiveData(){
         Data data = null;
-        try {      
+        try {
             data = (Data) this.objIn.readObject();
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
