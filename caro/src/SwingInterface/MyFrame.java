@@ -23,20 +23,23 @@ public class MyFrame extends JFrame {
         this.playField = playField;
     }
     
-    public MyFrame(){
-        this.playField = new JPanel(new GridLayout(3,3));
-        for (int i = 0; i < 9; i++) {
-            XOButton btn = new XOButton();
-            btn.addActionListener(btn);
-            this.playField.add(btn);
+    public MyFrame(int side){
+        this.playField = new JPanel(new GridLayout(side, side));
+        for (int row = 0; row < side; row++) {
+            for(int col = 0; col < side; col++){
+                XOButton btn = new XOButton(row, col);
+                btn.addActionListener(btn);
+                this.playField.add(btn);
+            }
         }
         this.getContentPane().add(this.playField);
         this.setVisible(true);
         this.pack();
+        this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     
-//    public static void main(String[] args) {
-//        JFrame myFrame = new MyFrame();
-//    }
+    public static void main(String[] args) {
+        MyFrame frame = new MyFrame(3);
+    }
 }

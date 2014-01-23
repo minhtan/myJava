@@ -26,12 +26,15 @@ public class NetworkController {
         try {
             this.svSoc = new ServerSocket(this.PORT);
             this.soc = svSoc.accept();
-            this.objIn = new ObjectInputStream (new BufferedInputStream(this.soc.getInputStream()));
-            this.objOut = new ObjectOutputStream (new BufferedOutputStream(this.soc.getOutputStream()));
+            this.objOut = new ObjectOutputStream(new BufferedOutputStream ( this.soc.getOutputStream() ));
+            this.objOut.flush();
+            this.objIn = new ObjectInputStream(new BufferedInputStream ( this.soc.getInputStream() ));
             
             return true;
         } catch (IOException ex) {
             Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);  
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }
@@ -39,14 +42,17 @@ public class NetworkController {
     public boolean connect(String hostIP){
         try {
             this.soc = new Socket(hostIP, this.PORT);
-            this.objIn = new ObjectInputStream (new BufferedInputStream(this.soc.getInputStream()));
-            this.objOut = new ObjectOutputStream (new BufferedOutputStream(this.soc.getOutputStream()));
+            this.objOut = new ObjectOutputStream(new BufferedOutputStream ( this.soc.getOutputStream() ));
+            this.objOut.flush();
+            this.objIn = new ObjectInputStream(new BufferedInputStream ( this.soc.getInputStream() ));  
             
             return true;
         } catch (UnknownHostException ex) {
             Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -71,6 +77,7 @@ public class NetworkController {
     public boolean sendData(Data data){
         try {
             this.objOut.writeObject(data);
+            this.objOut.flush();
             return true;
         } catch (IOException ex) {
             Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);

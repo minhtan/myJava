@@ -14,16 +14,20 @@ import javax.swing.JButton;
  * @author tannm_b01522
  */
 public class XOButton extends JButton implements ActionListener{
-    private int value = 0;
-    public XOButton(){
-        this.setText(this.value+"");
+    private int value;
+    private int rowPos;
+    private int colPos;
+    
+    public XOButton(int rowPos, int colPos){
+        this.value = 0;
+        this.rowPos = rowPos;
+        this.colPos = colPos;
+        this.setText(" ");
     }
+    
     @Override
     public void actionPerformed(ActionEvent ae) {
-        this.value ++;
-        if(this.value > 1){
-            this.value = 0;
-        }
-        this.setText(this.value+"");
+        XOButton source = (XOButton) ae.getSource();
+        
     }
 }
