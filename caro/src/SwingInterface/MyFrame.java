@@ -23,11 +23,11 @@ public class MyFrame extends JFrame {
         this.playField = playField;
     }
     
-    public MyFrame(int side){
+    public MyFrame(int side, int player){
         this.playField = new JPanel(new GridLayout(side, side));
         for (int row = 0; row < side; row++) {
             for(int col = 0; col < side; col++){
-                XOButton btn = new XOButton(row, col);
+                XOButton btn = new XOButton(row, col, player);
                 btn.addActionListener(btn);
                 this.playField.add(btn);
             }
@@ -40,6 +40,6 @@ public class MyFrame extends JFrame {
     }
     
     public static void main(String[] args) {
-        MyFrame frame = new MyFrame(3);
+        MyFrame frame = new MyFrame(3, 1);
     }
 }

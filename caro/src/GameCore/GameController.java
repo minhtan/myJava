@@ -10,6 +10,7 @@ package GameCore;
  */
 public class GameController {
     private GameBoard board;
+    private int count;
 
     public GameController(int side) {
         this.board = new GameBoard(side);
@@ -22,24 +23,65 @@ public class GameController {
             return false;
     }
     
-    public boolean makeAMove(int row, int col, int player){
-        try{
-            this.board.getBase()[row][col] = player;
-        }catch(Exception e){
-            return false;
-        }
-        return false;
+    public void makeAMove(int row, int col, int player){
+        this.board.getBase()[row][col] = player;
     }
     
     public int checkWinner(int row, int col){
         int winner = 0;
         int player = this.board.getBase()[row][col];
+        this.count = 0;
         
-        return winner;
+        //check diagonally 1->9
+        this.count = 0;
+        if(this.check(row, col, player, -1, -1))
+            winner = player;
+        else if(this.check(row, col, player, +1, +1))
+            winner = player;
+        if(winner != 0)
+            return winner;
+        
+        //check disagonally 7->3
+        this.count = 0;
+        if(this.check(row, col, player, +1, -1))
+            winner = player;
+        else if(this.check(row, col, player, -1, +1))
+            winner = player;
+        if(winner != 0)
+            return winner;
+        
+        //check vertically
+        this.count = 0;
+        if(this.check(row, col, player, -1, 0))
+            winner = player;
+        else if(this.check(row, col, player, +1, 0))
+            winner = player;
+        if(winner != 0)
+            return winner;
+        
+        //check horizontally
+        this.count = 0;
+        if(this.check(row, col, player, 0, -1))
+            winner = player;
+        else if(this.check(row, col, player, 0, +1))
+            winner = player;
+        if(winner != 0)
+            return winner;
+        
+        return winner; 
     }
     
-    private boolean checkDiagLR(){
-        
-        return true;
+    private boolean check(int row, int col, int player, int rowStep, int colStep){
+        if(this.board.getBase()[row+rowStep][col+colStep] != player && this.board.getBase()[row+rowStep][col+colStep] != 0)
+            this.count -= 2;
+        if(this.board.getBase()[row+rowStep][col+colStep] == player){
+            this.count ++;
+            if(this.count == 4)
+                return true;
+            if(this.check(row+rowStep, col+colStep, player, rowStep, colStep))
+                return true;
+        }
+        return false;
     }
+    
 }

@@ -33,9 +33,7 @@ public class NetworkController {
             return true;
         } catch (IOException ex) {
             Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);  
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        } catch (Exception e){}
         return false;
     }
     
@@ -51,9 +49,7 @@ public class NetworkController {
             Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
         return false;
     }
     

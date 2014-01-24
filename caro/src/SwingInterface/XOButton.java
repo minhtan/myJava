@@ -17,17 +17,20 @@ public class XOButton extends JButton implements ActionListener{
     private int value;
     private int rowPos;
     private int colPos;
+    private int player;
     
-    public XOButton(int rowPos, int colPos){
+    public XOButton(int rowPos, int colPos, int player){
         this.value = 0;
         this.rowPos = rowPos;
         this.colPos = colPos;
+        this.player = player;
         this.setText(" ");
     }
     
     @Override
     public void actionPerformed(ActionEvent ae) {
-        XOButton source = (XOButton) ae.getSource();
-        
+        this.value = this.player;
+        this.setText(this.value+"");
+        this.setEnabled(false);
     }
 }
