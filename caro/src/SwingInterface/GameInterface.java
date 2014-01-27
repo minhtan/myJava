@@ -16,13 +16,11 @@ import java.awt.CardLayout;
  */
 public class GameInterface extends javax.swing.JFrame {
     private TheGame theGame;
-    private NetworkController nwCtrl;
     /**
      * Creates new form GameInterface
      */
     public GameInterface() {
         this.theGame = new TheGame();
-        this.nwCtrl = new NetworkController();
         initComponents();
         this.lblHostInputMsg.setVisible(false);
         this.lblHostError.setVisible(false);
@@ -323,8 +321,6 @@ public class GameInterface extends javax.swing.JFrame {
     private void btnCreateHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateHostActionPerformed
         // TODO add your handling code here:
         try{
-            this.nwCtrl.openConnection();
-//            this.showPanel("pnlHostWaiting");
             this.showPanel("pnlPlay");
             theGame.hostGame( Integer.parseInt(this.inputSideSize.getText()));
         }catch(NumberFormatException e){
@@ -339,7 +335,6 @@ public class GameInterface extends javax.swing.JFrame {
     private void btnJoinHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinHostActionPerformed
         // TODO add your handling code here:
         try{
-            this.nwCtrl.connect("localhost");
             this.showPanel("pnlPlay");
             theGame.joinGame( this.inputHostIP.getText() );  
         }catch(Exception e){
@@ -387,36 +382,6 @@ public class GameInterface extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) { 
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                GameInterface gameInterface = new GameInterface();
-                gameInterface.setVisible(true);
-            }
-        });
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBackToHost;
