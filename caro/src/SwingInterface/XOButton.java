@@ -25,6 +25,7 @@ public class XOButton extends JButton implements ActionListener{
         this.colPos = colPos;
         this.player = player;
         this.setText(" ");
+        this.setFocusable(false);
     }
     
     @Override
