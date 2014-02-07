@@ -1,8 +1,8 @@
 package Game;
 
 
+import GameCore.Player;
 import SocketNetwork.*;
-import SwingInterface.GameInterface;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,18 +14,31 @@ import SwingInterface.GameInterface;
  *
  * @author Administrator
  */
-public class TheGame {
+public class TheGame implements Runnable{
     private NetworkController network;
+    private Player player;
+    private String input;
+    
+    @Override
+    public void run() {
+        if(this.player.getPlayer() == 1)
+            this.hostGame(Integer.parseInt(this.input));
+        else if(this.player.getPlayer() == 2)
+            this.joinGame(input);
+    }
 
-    public TheGame() {
+    public TheGame(Player player, String input) {
         this.network = new NetworkController();
+        this.player = player;
+        this.input = input;
     }
     
     public void hostGame(int side){
         this.network.openConnection();
         
         while( gameGoOn() ){
-
+            System.out.println("host successfully");
+            break;
         }
         
         this.network.closeConnection();
@@ -35,7 +48,8 @@ public class TheGame {
         this.network.connect(hostIP);
         
         while( gameGoOn() ){
-
+            System.out.println("join successfully");
+            break;
         }
         
         this.network.closeConnection();
@@ -45,30 +59,4 @@ public class TheGame {
         return true;
     }
     
-     public static void main(String args[]) { 
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        GameInterface gameInterface = new GameInterface();
-        gameInterface.setVisible(true);
-    }
 }

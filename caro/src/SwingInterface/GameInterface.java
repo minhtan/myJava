@@ -7,7 +7,7 @@
 package SwingInterface;
 
 import Game.TheGame;
-import SocketNetwork.NetworkController;
+import GameCore.Player;
 import java.awt.CardLayout;
 
 /**
@@ -15,12 +15,42 @@ import java.awt.CardLayout;
  * @author Administrator
  */
 public class GameInterface extends javax.swing.JFrame {
-    private TheGame theGame;
+    private Runnable theGame;
+    private Thread gameThread;
+    private Player player;
+    private javax.swing.JPanel playField;
     /**
      * Creates new form GameInterface
      */
+    
+    public static void main(String args[]) { 
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        GameInterface gameInterface = new GameInterface();
+        gameInterface.setVisible(true);
+    }
+    
     public GameInterface() {
-        this.theGame = new TheGame();
         initComponents();
         this.lblHostInputMsg.setVisible(false);
         this.lblHostError.setVisible(false);
@@ -58,7 +88,6 @@ public class GameInterface extends javax.swing.JFrame {
         btnBackToHost = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         pnlPlay = new javax.swing.JPanel();
-        playField = new javax.swing.JPanel();
         buttonWrap = new javax.swing.JPanel();
         btnBackToStart2 = new javax.swing.JButton();
 
@@ -277,9 +306,6 @@ public class GameInterface extends javax.swing.JFrame {
 
         pnlPlay.setLayout(new java.awt.BorderLayout());
 
-        playField.setLayout(new java.awt.BorderLayout());
-        pnlPlay.add(playField, java.awt.BorderLayout.CENTER);
-
         buttonWrap.setPreferredSize(new java.awt.Dimension(421, 25));
 
         btnBackToStart2.setText("Quit playing");
@@ -320,9 +346,14 @@ public class GameInterface extends javax.swing.JFrame {
 
     private void btnCreateHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateHostActionPerformed
         // TODO add your handling code here:
+        this.player = new Player(1);
+        this.theGame = new TheGame(this.player, this.inputSideSize.getText());
+        this.gameThread = new Thread(this.theGame);
         try{
             this.showPanel("pnlPlay");
-            theGame.hostGame( Integer.parseInt(this.inputSideSize.getText()));
+            this.gameThread.start();
+            this.playField = new PlayPanel(Integer.parseInt(this.inputSideSize.getText()), this.player.getPlayer());
+            this.pnlPlay.add(this.playField);
         }catch(NumberFormatException e){
             this.lblHostInputMsg.setVisible(true);
             this.showPanel("pnlHost");
@@ -334,9 +365,13 @@ public class GameInterface extends javax.swing.JFrame {
 
     private void btnJoinHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinHostActionPerformed
         // TODO add your handling code here:
+        this.player = new Player(2);
+        this.theGame = new TheGame(this.player, this.inputHostIP.getText());
+        this.gameThread = new Thread(this.theGame);
         try{
             this.showPanel("pnlPlay");
-            theGame.joinGame( this.inputHostIP.getText() );  
+            this.gameThread.start(); 
+            
         }catch(Exception e){
             this.lblJoinError.setVisible(true);
             this.showPanel("pnlJoin");
@@ -402,7 +437,6 @@ public class GameInterface extends javax.swing.JFrame {
     private javax.swing.JLabel lblHostInputMsg;
     private javax.swing.JLabel lblJoin;
     private javax.swing.JLabel lblJoinError;
-    private javax.swing.JPanel playField;
     private javax.swing.JPanel pnlHost;
     private javax.swing.JPanel pnlHostWaiting;
     private javax.swing.JPanel pnlJoin;
