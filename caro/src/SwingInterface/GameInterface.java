@@ -7,54 +7,58 @@
 package SwingInterface;
 
 import Game.TheGame;
-import GameCore.Player;
 import java.awt.CardLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Administrator
  */
-public class GameInterface extends javax.swing.JFrame {
-    private Runnable theGame;
-    private Thread gameThread;
-    private Player player;
+public class GameInterface extends javax.swing.JFrame implements Runnable{
     private javax.swing.JPanel playField;
+    private int side;
+    private int playerNo;
+    private String hostIP;
+    
+    public int getSide() {
+        return side;
+    }
+
+    public void setSide(int side) {
+        this.side = side;
+    }
+      
+    public int getPlayerNo() {
+        return playerNo;
+    }
+
+    public String getHostIP() {
+        return hostIP;
+    }
     /**
      * Creates new form GameInterface
      */
     
-    public static void main(String args[]) { 
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GameInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        GameInterface gameInterface = new GameInterface();
-        gameInterface.setVisible(true);
-    }
-    
-    public GameInterface() {
-        initComponents();
+    @Override
+    public void run() {
+        this.initComponents();
         this.lblHostInputMsg.setVisible(false);
         this.lblHostError.setVisible(false);
         this.lblJoinError.setVisible(false);
+        this.setVisible(true);
+        synchronized(TheGame.lock){
+            try {
+                TheGame.lock.wait();
+                
+                this.showPanel("pnlPlay");
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GameInterface.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public GameInterface() {       
     }
 
     /**
@@ -279,7 +283,7 @@ public class GameInterface extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Waiting for 2nd player to connect");
+        jLabel1.setText("Waiting for 2nd player");
 
         javax.swing.GroupLayout pnlHostWaitingLayout = new javax.swing.GroupLayout(pnlHostWaiting);
         pnlHostWaiting.setLayout(pnlHostWaitingLayout);
@@ -289,16 +293,16 @@ public class GameInterface extends javax.swing.JFrame {
                 .addComponent(btnBackToHost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(366, 366, 366))
             .addGroup(pnlHostWaitingLayout.createSequentialGroup()
-                .addGap(129, 129, 129)
+                .addGap(154, 154, 154)
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(131, 131, 131))
+                .addGap(160, 160, 160))
         );
         pnlHostWaitingLayout.setVerticalGroup(
             pnlHostWaitingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlHostWaitingLayout.createSequentialGroup()
-                .addGap(139, 139, 139)
+                .addGap(148, 148, 148)
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(164, 164, 164)
+                .addGap(155, 155, 155)
                 .addComponent(btnBackToHost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -327,7 +331,7 @@ public class GameInterface extends javax.swing.JFrame {
             buttonWrapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonWrapLayout.createSequentialGroup()
                 .addComponent(btnBackToStart2)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
         pnlPlay.add(buttonWrap, java.awt.BorderLayout.PAGE_END);
@@ -346,37 +350,32 @@ public class GameInterface extends javax.swing.JFrame {
 
     private void btnCreateHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateHostActionPerformed
         // TODO add your handling code here:
-        this.player = new Player(1);
-        this.theGame = new TheGame(this.player, this.inputSideSize.getText());
-        this.gameThread = new Thread(this.theGame);
-        try{
-            this.showPanel("pnlPlay");
-            this.gameThread.start();
-            this.playField = new PlayPanel(Integer.parseInt(this.inputSideSize.getText()), this.player.getPlayer());
-            this.pnlPlay.add(this.playField);
-        }catch(NumberFormatException e){
-            this.lblHostInputMsg.setVisible(true);
-            this.showPanel("pnlHost");
-        }catch(Exception e){
-            this.lblHostError.setVisible(true);
-            this.showPanel("pnlHost");
-        }
+        this.playerNo = 1;
+        this.side = Integer.parseInt(this.inputSideSize.getText());
+        synchronized(TheGame.lock){
+            try {
+                TheGame.lock.notify();
+                this.showPanel("pnlHostWaiting");
+                TheGame.lock.wait();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GameInterface.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }       
     }//GEN-LAST:event_btnCreateHostActionPerformed
 
     private void btnJoinHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinHostActionPerformed
         // TODO add your handling code here:
-        this.player = new Player(2);
-        this.theGame = new TheGame(this.player, this.inputHostIP.getText());
-        this.gameThread = new Thread(this.theGame);
-        try{
-            this.showPanel("pnlPlay");
-            this.gameThread.start(); 
-            
-        }catch(Exception e){
-            this.lblJoinError.setVisible(true);
-            this.showPanel("pnlJoin");
+        this.playerNo = 2;
+        this.hostIP = this.inputHostIP.getText();
+        synchronized (TheGame.lock) {
+            try {
+                TheGame.lock.notify();
+                this.showPanel("pnlHostWaiting");
+                TheGame.lock.wait();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GameInterface.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-
     }//GEN-LAST:event_btnJoinHostActionPerformed
 
     private void btnHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHostActionPerformed
@@ -444,4 +443,5 @@ public class GameInterface extends javax.swing.JFrame {
     private javax.swing.JPanel pnlStart;
     private javax.swing.JPanel pnlWrapper;
     // End of variables declaration//GEN-END:variables
+
 }
