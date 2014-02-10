@@ -40,21 +40,20 @@ public class Elevator{
 	}
 
 	public short move(short target){
-		boolean isUp = true;
+		
 		if (target > this.currentFloor) {
 			this.status = 1;
 		}else if (target < this.currentFloor) {
 			this.status = -1;
-			isUp = false;
 		}else if (target == this.currentFloor) {
 			this.status = 0;
 		}
 		short i = this.currentFloor;
 		while(this.currentFloor != target){
 			System.out.println("Floor: " + i);
-			if(isUp) {
+			if(this.status == 1) {
 				i++;
-			}else {
+			}else if (this.status == -1){
 				i--;
 			}
 			this.currentFloor = i;
