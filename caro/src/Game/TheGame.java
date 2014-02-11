@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Administrator
  */
-public class TheGame{
+public class TheGame implements Runnable{
     private GameController gameCtrl;
     private NetworkController networkCtrl;
     private GameInterface swing;
@@ -28,29 +28,35 @@ public class TheGame{
     public static void main(String args[]) { 
         TheGame game = new TheGame();
         game.swing = new GameInterface();
+        
         Thread swingThread = new Thread(game.swing);
         swingThread.start();     
-               
-        synchronized (TheGame.lock) {
+        
+        Thread gameThread = new Thread(game);
+        gameThread.start();
+    }
+
+    @Override
+    public void run() {
+        synchronized(TheGame.lock){
             try {
-                TheGame.lock.notify();
-                TheGame.lock.wait();          
+                TheGame.lock.wait();
             } catch (InterruptedException ex) {
                 Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            switch (game.swing.getPlayerNo()) {
-                case 1:
-                    game.hostGame(game.swing.getSide());
-                    break;
-                case 2:
-                    game.joinGame(game.swing.getHostIP());
-                    break;
-                default:
-                    break;
-            }
+        }
+        switch (this.swing.getPlayerNo()) {
+            case 1:
+                this.hostGame(this.swing.getSide());
+                break;
+            case 2:
+                this.joinGame(this.swing.getHostIP());
+                break;
+            default:
+                break;
         }
     }
-
+    
     public TheGame() {
         this.networkCtrl = new NetworkController();
         this.data = new Data(0, 0);
@@ -66,8 +72,7 @@ public class TheGame{
         synchronized(TheGame.lock){
             try {
                 TheGame.lock.notify();
-                TheGame.lock.wait();
-                  
+                TheGame.lock.wait();         
             } catch (InterruptedException ex) {
                 Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -92,7 +97,6 @@ public class TheGame{
             try {
                 TheGame.lock.notify();
                 TheGame.lock.wait();
-
             } catch (InterruptedException ex) {
                 Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
             }

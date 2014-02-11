@@ -51,6 +51,9 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
             try {
                 TheGame.lock.wait();
                 
+                this.playField = new PlayPanel(side, playerNo);
+                this.pnlPlay.add(this.playField, java.awt.BorderLayout.CENTER);
+
                 this.showPanel("pnlPlay");
             } catch (InterruptedException ex) {
                 Logger.getLogger(GameInterface.class.getName()).log(Level.SEVERE, null, ex);
@@ -334,7 +337,7 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
                 .addGap(0, 2, Short.MAX_VALUE))
         );
 
-        pnlPlay.add(buttonWrap, java.awt.BorderLayout.PAGE_END);
+        pnlPlay.add(buttonWrap, java.awt.BorderLayout.SOUTH);
 
         pnlWrapper.add(pnlPlay, "pnlPlay");
 
@@ -353,13 +356,8 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         this.playerNo = 1;
         this.side = Integer.parseInt(this.inputSideSize.getText());
         synchronized(TheGame.lock){
-            try {
-                TheGame.lock.notify();
-                this.showPanel("pnlHostWaiting");
-                TheGame.lock.wait();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(GameInterface.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            TheGame.lock.notify();
+            this.showPanel("pnlHostWaiting");
         }       
     }//GEN-LAST:event_btnCreateHostActionPerformed
 
@@ -368,13 +366,8 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         this.playerNo = 2;
         this.hostIP = this.inputHostIP.getText();
         synchronized (TheGame.lock) {
-            try {
-                TheGame.lock.notify();
-                this.showPanel("pnlHostWaiting");
-                TheGame.lock.wait();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(GameInterface.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            TheGame.lock.notify();
+            this.showPanel("pnlHostWaiting");
         }
     }//GEN-LAST:event_btnJoinHostActionPerformed
 
