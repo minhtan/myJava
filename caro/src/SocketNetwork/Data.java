@@ -15,10 +15,20 @@ import java.io.Serializable;
 public class Data implements Serializable{
     private int row;
     private int col;
-
-    public Data(int row, int col) {
+    private int player;
+ 
+    public Data(int row, int col, int player) {
         this.row = row;
         this.col = col;
+        this.player = player;
+    }
+    
+    public int getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(int player) {
+        this.player = player;
     }
     
     public int getRow() {

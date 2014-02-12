@@ -16,7 +16,7 @@ public class GameController {
         this.board = new GameBoard(side);
     }
     
-    public boolean validateMove(int row, int col){
+    private boolean validateMove(int row, int col){
         if(this.board.getBase()[row][col] == 0)
             return true;
         else
@@ -24,7 +24,8 @@ public class GameController {
     }
     
     public void makeAMove(int row, int col, int player){
-        this.board.getBase()[row][col] = player;
+        if(this.validateMove(row, col) == true)
+            this.board.getBase()[row][col] = player;
     }
     
     public int checkWinner(int row, int col){

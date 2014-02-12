@@ -59,7 +59,7 @@ public class TheGame implements Runnable{
     
     public TheGame() {
         this.networkCtrl = new NetworkController();
-        this.data = new Data(0, 0);
+        this.data = new Data(0, 0, 0);
     }
     
     public void hostGame(int side){
@@ -70,17 +70,23 @@ public class TheGame implements Runnable{
         this.gameCtrl = new GameController(side);
         
         synchronized(TheGame.lock){
-            try {
-                TheGame.lock.notify();
-                TheGame.lock.wait();         
-            } catch (InterruptedException ex) {
-                Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
+            TheGame.lock.notify();
+            while (gameGoOn()) {
+                try {
+                    this.swing.setFlag(true);
+                    TheGame.lock.wait();
+                    
+                    this.data = this.swing.getData();
+                    this.gameCtrl.makeAMove(this.data.getRow(), this.data.getCol(), this.data.getPlayer());
+                    this.networkCtrl.sendData(data);
+                    
+                    this.swing.setFlag(false);
+                    this.data = this.networkCtrl.receiveData();
+                    
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        }
-        
-        while( gameGoOn() ){
-            System.out.println("host successfully");
-            break;
         }
         
         this.networkCtrl.closeConnection();
@@ -90,23 +96,27 @@ public class TheGame implements Runnable{
         this.player = new Player(2);
         this.networkCtrl.connect(hostIP);
         this.data = networkCtrl.receiveData();
-        this.gameCtrl = new GameController(data.getCol());
-        this.swing.setSide(data.getCol());
+        this.gameCtrl = new GameController(this.data.getCol());
+        this.swing.setSide(this.data.getCol());
         
         synchronized (TheGame.lock) {
-            try {
-                TheGame.lock.notify();
-                TheGame.lock.wait();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
+            TheGame.lock.notify();
+            while (gameGoOn()) {
+                try {
+                    this.swing.setFlag(false);
+                    
+                    this.data = this.networkCtrl.receiveData();
+                    this.gameCtrl.makeAMove(this.data.getRow(), this.data.getCol(), this.data.getPlayer());
+                    this.swing.getPlayField().getButton(this.data.getRow(), this.data.getCol()).update(this.data.getPlayer());
+                    
+                    this.swing.setFlag(true);
+                    TheGame.lock.wait();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
-        
-        while( gameGoOn() ){
-            System.out.println("join successfully");
-            break;
-        }
-        
+  
         this.networkCtrl.closeConnection();
     }
     

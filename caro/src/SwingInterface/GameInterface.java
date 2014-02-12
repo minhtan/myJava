@@ -7,19 +7,43 @@
 package SwingInterface;
 
 import Game.TheGame;
+import SocketNetwork.Data;
 import java.awt.CardLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Administrator
  */
 public class GameInterface extends javax.swing.JFrame implements Runnable{
-    private javax.swing.JPanel playField;
+    private PlayField playField;
     private int side;
     private int playerNo;
     private String hostIP;
+    private boolean flag;
+    private Data data;
+
+    public PlayField getPlayField() {
+        return playField;
+    }
+    
+    public void setData(Data data){
+        this.data = data;
+    }
+    
+    public Data getData(){
+        return this.data;
+    }
+    
+    public boolean getFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
     
     public int getSide() {
         return side;
@@ -51,9 +75,9 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
             try {
                 TheGame.lock.wait();
                 
-                this.playField = new PlayPanel(side, playerNo);
+                this.playField = new PlayField(this.side, this);
                 this.pnlPlay.add(this.playField, java.awt.BorderLayout.CENTER);
-
+                
                 this.showPanel("pnlPlay");
             } catch (InterruptedException ex) {
                 Logger.getLogger(GameInterface.class.getName()).log(Level.SEVERE, null, ex);
@@ -355,7 +379,7 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         // TODO add your handling code here:
         this.playerNo = 1;
         this.side = Integer.parseInt(this.inputSideSize.getText());
-        synchronized(TheGame.lock){
+        synchronized (TheGame.lock) {
             TheGame.lock.notify();
             this.showPanel("pnlHostWaiting");
         }       
