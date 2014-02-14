@@ -26,20 +26,28 @@ public class TheGame implements Runnable{
     public static final Object lock = new Object();
     
     public static void main(String args[]) { 
-        TheGame game = new TheGame();
-        game.swing = new GameInterface();
+        try {
+            TheGame game = new TheGame();
+            game.swing = new GameInterface();
+            
+            Thread swingThread = new Thread(game.swing);
+            swingThread.start();
+            
+            Thread gameThread = new Thread(game);
+            gameThread.start();
+            
+            gameThread.join();
+            swingThread.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        Thread swingThread = new Thread(game.swing);
-        swingThread.start();     
-        
-        Thread gameThread = new Thread(game);
-        gameThread.start();
     }
 
     @Override
     public void run() {
-        synchronized(TheGame.lock){
-            try {
+        synchronized(TheGame.lock){         
+            try { 
                 TheGame.lock.wait();
             } catch (InterruptedException ex) {
                 Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
