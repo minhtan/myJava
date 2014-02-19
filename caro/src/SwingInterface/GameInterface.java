@@ -22,7 +22,7 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
     private int side;
     private int playerNo;
     private String hostIP;
-    private boolean flag;
+    private boolean flag = true;
     private Data data;
 
     public PlayField getPlayField() {
@@ -71,10 +71,11 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         this.lblHostError.setVisible(false);
         this.lblJoinError.setVisible(false);
         this.setVisible(true);
-        synchronized(TheGame.lock){
+        synchronized(this.data){
             try {
-                TheGame.lock.wait();
-                
+                while(!this.flag){                
+                    this.wait();
+                }
                 this.playField = new PlayField(this.side, this);
                 this.pnlPlay.add(this.playField, java.awt.BorderLayout.CENTER);
                 
@@ -85,7 +86,8 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         }
     }
     
-    public GameInterface() {       
+    public GameInterface() {   
+        this.data = new Data(0, 0, 0);
     }
 
     /**
@@ -380,7 +382,7 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         this.playerNo = 1;
         this.side = Integer.parseInt(this.inputSideSize.getText());
         synchronized (TheGame.lock) {
-            TheGame.lock.notify();
+            this.notify();
             this.showPanel("pnlHostWaiting");
         }       
     }//GEN-LAST:event_btnCreateHostActionPerformed
@@ -390,7 +392,7 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         this.playerNo = 2;
         this.hostIP = this.inputHostIP.getText();
         synchronized (TheGame.lock) {
-            TheGame.lock.notify();
+            this.notify();
             this.showPanel("pnlHostWaiting");
         }
     }//GEN-LAST:event_btnJoinHostActionPerformed

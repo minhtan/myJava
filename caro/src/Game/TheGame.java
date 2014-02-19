@@ -40,44 +40,44 @@ public class TheGame implements Runnable{
             swingThread.join();
         } catch (InterruptedException ex) {
             Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        } 
     }
 
     @Override
     public void run() {
         synchronized(TheGame.lock){         
             try { 
-                TheGame.lock.wait();
+                while(this.swing.getFlag()){
+                    this.wait();
+                }
+                this.data = this.swing.getData();
+                switch (this.swing.getPlayerNo()) {
+                    case 1:
+                        this.hostGame(this.swing.getSide());
+                        break;
+                    case 2:
+                        this.joinGame(this.swing.getHostIP());
+                        break;
+                    default:
+                        break;
+                }
             } catch (InterruptedException ex) {
                 Logger.getLogger(TheGame.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        switch (this.swing.getPlayerNo()) {
-            case 1:
-                this.hostGame(this.swing.getSide());
-                break;
-            case 2:
-                this.joinGame(this.swing.getHostIP());
-                break;
-            default:
-                break;
         }
     }
     
     public TheGame() {
         this.networkCtrl = new NetworkController();
-        this.data = new Data(0, 0, 0);
     }
     
     public void hostGame(int side){
-        this.player = new Player(1);       
-        this.networkCtrl.openConnection();
-        this.data.setCol(side);
-        this.networkCtrl.sendData(this.data);
-        this.gameCtrl = new GameController(side);
-        
         synchronized(TheGame.lock){
+            this.player = new Player(1);
+            this.networkCtrl.openConnection();
+            this.data.setCol(side);
+            this.networkCtrl.sendData(this.data);
+            this.gameCtrl = new GameController(side);
             TheGame.lock.notify();
             while (gameGoOn()) {
                 try {
@@ -96,18 +96,16 @@ public class TheGame implements Runnable{
                 }
             }
         }
-        
         this.networkCtrl.closeConnection();
     }
     
-    public void joinGame(String hostIP){      
-        this.player = new Player(2);
-        this.networkCtrl.connect(hostIP);
-        this.data = networkCtrl.receiveData();
-        this.gameCtrl = new GameController(this.data.getCol());
-        this.swing.setSide(this.data.getCol());
-        
+    public void joinGame(String hostIP){       
         synchronized (TheGame.lock) {
+            this.player = new Player(2);
+            this.networkCtrl.connect(hostIP);
+            this.data = networkCtrl.receiveData();
+            this.gameCtrl = new GameController(this.data.getCol());
+            this.swing.setSide(this.data.getCol());
             TheGame.lock.notify();
             while (gameGoOn()) {
                 try {
