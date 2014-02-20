@@ -71,23 +71,31 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         this.lblHostError.setVisible(false);
         this.lblJoinError.setVisible(false);
         this.setVisible(true);
-        synchronized(this.data){
+        
+        synchronized (TheGame.lock) {
             try {
-                while(!this.flag){                
-                    this.wait();
+                //stuck here
+                
+                this.flag = false;
+                TheGame.lock.notify();
+                
+                while (!this.flag) {
+                    TheGame.lock.wait();
                 }
+
                 this.playField = new PlayField(this.side, this);
                 this.pnlPlay.add(this.playField, java.awt.BorderLayout.CENTER);
-                
                 this.showPanel("pnlPlay");
+
             } catch (InterruptedException ex) {
                 Logger.getLogger(GameInterface.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
     }
     
-    public GameInterface() {   
-        this.data = new Data(0, 0, 0);
+    public GameInterface(Data data) {   
+        this.data = data;
     }
 
     /**
@@ -379,22 +387,16 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
 
     private void btnCreateHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateHostActionPerformed
         // TODO add your handling code here:
+        this.showPanel("pnlHostWaiting");
         this.playerNo = 1;
         this.side = Integer.parseInt(this.inputSideSize.getText());
-        synchronized (TheGame.lock) {
-            this.notify();
-            this.showPanel("pnlHostWaiting");
-        }       
     }//GEN-LAST:event_btnCreateHostActionPerformed
 
     private void btnJoinHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinHostActionPerformed
         // TODO add your handling code here:
+        this.showPanel("pnlHostWaiting");
         this.playerNo = 2;
         this.hostIP = this.inputHostIP.getText();
-        synchronized (TheGame.lock) {
-            this.notify();
-            this.showPanel("pnlHostWaiting");
-        }
     }//GEN-LAST:event_btnJoinHostActionPerformed
 
     private void btnHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHostActionPerformed
