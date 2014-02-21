@@ -74,10 +74,11 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         
         synchronized (TheGame.lock) {
             try {
-                //stuck here
+                while(this.flag){
+                    TheGame.lock.wait();
+                }
                 
-                this.flag = false;
-                TheGame.lock.notify();
+                //TheGame.lock.notify();
                 
                 while (!this.flag) {
                     TheGame.lock.wait();
@@ -390,6 +391,10 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         this.showPanel("pnlHostWaiting");
         this.playerNo = 1;
         this.side = Integer.parseInt(this.inputSideSize.getText());
+        synchronized(TheGame.lock){
+            this.flag = false;
+            TheGame.lock.notifyAll();
+        }
     }//GEN-LAST:event_btnCreateHostActionPerformed
 
     private void btnJoinHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinHostActionPerformed
@@ -397,6 +402,10 @@ public class GameInterface extends javax.swing.JFrame implements Runnable{
         this.showPanel("pnlHostWaiting");
         this.playerNo = 2;
         this.hostIP = this.inputHostIP.getText();
+        synchronized (TheGame.lock) {
+            this.flag = false;
+            TheGame.lock.notifyAll();
+        }
     }//GEN-LAST:event_btnJoinHostActionPerformed
 
     private void btnHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHostActionPerformed

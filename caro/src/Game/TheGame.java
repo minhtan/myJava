@@ -79,7 +79,7 @@ public class TheGame implements Runnable {
                 this.networkCtrl.sendData(this.data);
                 this.gameCtrl = new GameController(side);
                 this.swing.setFlag(true);
-                TheGame.lock.notify();
+                TheGame.lock.notifyAll();
                 while (gameGoOn()) {
                     
                     while (this.swing.getFlag()) {
@@ -111,7 +111,7 @@ public class TheGame implements Runnable {
                 this.gameCtrl = new GameController(this.data.getCol());
                 this.swing.setSide(this.data.getCol());
                  this.swing.setFlag(true);
-                TheGame.lock.notify();
+                TheGame.lock.notifyAll();
                 while (gameGoOn()) {
 
                     this.swing.setFlag(false);
