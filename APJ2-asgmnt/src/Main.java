@@ -1,6 +1,6 @@
 
 import Manager.Manager;
-import Models.Student;
+import Model.Student;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,7 +14,5 @@ import Models.Student;
  */
 public class Main {
     public static void main(String[] args) {
-        Manager mn = new Manager();
-        System.out.println(mn.getType(new Student()));
     }
 }
