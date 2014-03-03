@@ -15,8 +15,4 @@ import java.util.ArrayList;
 public class Manager {
     private ArrayList list;
     
-    
-    public Class getType(Object object){
-        return object.getClass();
-    }
 }
