@@ -9,12 +9,12 @@ package SwingInterface;
  * @author Tan
  */
 public class MainFrame extends javax.swing.JFrame {
-
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
+        setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -27,7 +27,12 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
-        internalFrame = new javax.swing.JInternalFrame();
+        studentManager = new javax.swing.JInternalFrame();
+        studentToolbar = new javax.swing.JToolBar();
+        btnNewStudent = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        courseManager = new javax.swing.JInternalFrame();
         menuBar = new javax.swing.JMenuBar();
         menuOption = new javax.swing.JMenu();
         menuOptionConnect = new javax.swing.JMenuItem();
@@ -39,21 +44,81 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Student Manager");
 
-        internalFrame.setVisible(true);
+        studentManager.setClosable(true);
+        studentManager.setMaximizable(true);
+        studentManager.setTitle("Student Manager");
+        studentManager.setVisible(true);
 
-        javax.swing.GroupLayout internalFrameLayout = new javax.swing.GroupLayout(internalFrame.getContentPane());
-        internalFrame.getContentPane().setLayout(internalFrameLayout);
-        internalFrameLayout.setHorizontalGroup(
-            internalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+        studentToolbar.setFloatable(false);
+        studentToolbar.setRollover(true);
+
+        btnNewStudent.setText("New");
+        btnNewStudent.setFocusable(false);
+        btnNewStudent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNewStudent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNewStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewStudentActionPerformed(evt);
+            }
+        });
+        studentToolbar.add(btnNewStudent);
+
+        jButton1.setText("Update");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        studentToolbar.add(jButton1);
+
+        jButton2.setText("Delete");
+        jButton2.setFocusable(false);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        studentToolbar.add(jButton2);
+
+        javax.swing.GroupLayout studentManagerLayout = new javax.swing.GroupLayout(studentManager.getContentPane());
+        studentManager.getContentPane().setLayout(studentManagerLayout);
+        studentManagerLayout.setHorizontalGroup(
+            studentManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(studentToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
         );
-        internalFrameLayout.setVerticalGroup(
-            internalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 110, Short.MAX_VALUE)
+        studentManagerLayout.setVerticalGroup(
+            studentManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(studentManagerLayout.createSequentialGroup()
+                .addComponent(studentToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 229, Short.MAX_VALUE))
         );
 
-        internalFrame.setBounds(10, 20, 210, 140);
-        desktopPane.add(internalFrame, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        studentManager.setBounds(180, 20, 210, 140);
+        desktopPane.add(studentManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        try {
+            studentManager.setMaximum(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
+
+        courseManager.setClosable(true);
+        courseManager.setMaximizable(true);
+        courseManager.setTitle("Course Manager");
+        courseManager.setVisible(true);
+
+        javax.swing.GroupLayout courseManagerLayout = new javax.swing.GroupLayout(courseManager.getContentPane());
+        courseManager.getContentPane().setLayout(courseManagerLayout);
+        courseManagerLayout.setHorizontalGroup(
+            courseManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 384, Short.MAX_VALUE)
+        );
+        courseManagerLayout.setVerticalGroup(
+            courseManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 254, Short.MAX_VALUE)
+        );
+
+        courseManager.setBounds(0, 0, 180, 140);
+        desktopPane.add(courseManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        try {
+            courseManager.setMaximum(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
 
         menuBar.setToolTipText("Student Manager");
 
@@ -100,7 +165,17 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void menuOptionConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOptionConnectActionPerformed
         // TODO add your handling code here:
+        DBInfoForm dialog = new DBInfoForm(this, true); 
+        if(dialog.getSignal()){
+            System.out.println(dialog.getTxtPsw());
+            System.out.println(dialog.getTxtServer());
+            System.out.println(dialog.getTxtUserName());
+        }
     }//GEN-LAST:event_menuOptionConnectActionPerformed
+
+    private void btnNewStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewStudentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNewStudentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -128,17 +203,24 @@ public class MainFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                MainFrame mainFrame = new MainFrame();
+                mainFrame.setVisible(true);
+                mainFrame.studentManager.setVisible(false);
+                mainFrame.courseManager.setVisible(false);
             }
         });
+        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnNewStudent;
+    private javax.swing.JInternalFrame courseManager;
     private javax.swing.JDesktopPane desktopPane;
-    private javax.swing.JInternalFrame internalFrame;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuManage;
     private javax.swing.JMenuItem menuManageCourse;
@@ -146,5 +228,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu menuOption;
     private javax.swing.JMenuItem menuOptionConnect;
     private javax.swing.JMenuItem menuOptionExit;
+    private javax.swing.JInternalFrame studentManager;
+    private javax.swing.JToolBar studentToolbar;
     // End of variables declaration//GEN-END:variables
 }

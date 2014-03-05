@@ -29,14 +29,18 @@ public class DatabaseDriver {
             this.crs.setUrl("jdbc:sqlserver://" + this.server + ";Database=db_student");
             this.crs.setUsername(this.username);
             this.crs.setPassword(this.psw);
-            this.crs.close();
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }    
     }
     
-    public selectFrom(String table){
-    
+    public void selectFrom(String table){
+        try {
+            this.crs.setCommand("SELECT * FROM" + table);
+            this.crs.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }  
     }
 
     public String getServer() {
