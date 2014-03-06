@@ -56,7 +56,12 @@ public class DBInfoForm extends java.awt.Dialog {
 
         lblUserName.setText("User name");
 
+        txtUserName.setText("admin");
+        txtUserName.setToolTipText("");
+
         lblPsw.setText("Password");
+
+        txtPsw.setText("admin123");
 
         btnExit.setText("Close");
         btnExit.addActionListener(new java.awt.event.ActionListener() {

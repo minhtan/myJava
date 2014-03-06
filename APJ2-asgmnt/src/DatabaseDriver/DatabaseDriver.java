@@ -34,12 +34,14 @@ public class DatabaseDriver {
         }    
     }
     
-    public void selectFrom(String table){
+    public CachedRowSet selectFrom(String table){
         try {
-            this.crs.setCommand("SELECT * FROM" + table);
+            this.crs.setCommand("SELECT * FROM" + " " + table);
             this.crs.execute();
+            return this.crs;
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }  
     }
 
