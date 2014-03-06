@@ -4,12 +4,12 @@
  */
 package SwingInterface;
 
-import DatabaseDriver.*;
+import DatabaseLayer.DatabaseDriver;
 import Manager.*;
 import java.beans.PropertyVetoException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sql.rowset.CachedRowSet;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -17,7 +17,7 @@ import javax.sql.rowset.CachedRowSet;
  */
 public class MainFrame extends javax.swing.JFrame {
     private DatabaseDriver dbDriver;
-    private studentTableModel stdTblMdl;
+    private StudentManager stdMng;
     
     /**
      * Creates new form MainFrame
@@ -42,6 +42,7 @@ public class MainFrame extends javax.swing.JFrame {
         studentToolbar = new javax.swing.JToolBar();
         btnNewStudent = new javax.swing.JButton();
         btnUpdateStudent = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
         btnDeleteStudent = new javax.swing.JButton();
         studentScrollBar = new javax.swing.JScrollPane();
         studentTable = new javax.swing.JTable();
@@ -60,7 +61,6 @@ public class MainFrame extends javax.swing.JFrame {
         interlFrmStudentManager.setClosable(true);
         interlFrmStudentManager.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         interlFrmStudentManager.setMaximizable(true);
-        interlFrmStudentManager.setResizable(true);
         interlFrmStudentManager.setTitle("Student Manager");
         interlFrmStudentManager.setVisible(true);
 
@@ -84,23 +84,18 @@ public class MainFrame extends javax.swing.JFrame {
         btnUpdateStudent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         studentToolbar.add(btnUpdateStudent);
 
+        btnRefresh.setText("Refresh");
+        btnRefresh.setFocusable(false);
+        btnRefresh.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRefresh.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        studentToolbar.add(btnRefresh);
+
         btnDeleteStudent.setText("Delete");
         btnDeleteStudent.setFocusable(false);
         btnDeleteStudent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDeleteStudent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         studentToolbar.add(btnDeleteStudent);
 
-        studentTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         studentScrollBar.setViewportView(studentTable);
 
         javax.swing.GroupLayout interlFrmStudentManagerLayout = new javax.swing.GroupLayout(interlFrmStudentManager.getContentPane());
@@ -116,11 +111,11 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(studentToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(studentScrollBar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 164, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        desktopPane.add(interlFrmStudentManager);
         interlFrmStudentManager.setBounds(180, 20, 210, 140);
-        desktopPane.add(interlFrmStudentManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
         try {
             interlFrmStudentManager.setMaximum(true);
         } catch (java.beans.PropertyVetoException e1) {
@@ -130,7 +125,6 @@ public class MainFrame extends javax.swing.JFrame {
         interFrmcourseManager.setClosable(true);
         interFrmcourseManager.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         interFrmcourseManager.setMaximizable(true);
-        interFrmcourseManager.setResizable(true);
         interFrmcourseManager.setTitle("Course Manager");
         interFrmcourseManager.setVisible(true);
 
@@ -142,11 +136,11 @@ public class MainFrame extends javax.swing.JFrame {
         );
         interFrmcourseManagerLayout.setVerticalGroup(
             interFrmcourseManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 415, Short.MAX_VALUE)
+            .addGap(0, 409, Short.MAX_VALUE)
         );
 
+        desktopPane.add(interFrmcourseManager);
         interFrmcourseManager.setBounds(0, 0, 180, 140);
-        desktopPane.add(interFrmcourseManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
         try {
             interFrmcourseManager.setMaximum(true);
         } catch (java.beans.PropertyVetoException e1) {
@@ -228,9 +222,14 @@ public class MainFrame extends javax.swing.JFrame {
         if(this.dbDriver != null){
             if(this.interlFrmStudentManager.isVisible() == false){
                 try {
-                    CachedRowSet studentRowSet = this.dbDriver.selectFrom("Students");
-                    this.stdTblMdl = new studentTableModel(studentRowSet);
-                    this.studentTable.setModel(stdTblMdl);
+                    this.stdMng = new StudentManager(this.dbDriver);        
+                    this.studentTable.setModel(this.stdMng.listStudent());
+                    
+                    for (int i = 0; i < this.studentTable.getColumnCount(); i++) {
+                        TableColumn columnTemp = this.studentTable.getTableHeader().getColumnModel().getColumn(i);
+                        columnTemp.setHeaderValue(this.stdMng.getStdTblMdl().getHeadings()[i]);
+                    }
+                   this.studentTable.getTableHeader() .setReorderingAllowed(false);
                     
                     this.interlFrmStudentManager.setVisible(true);
                     this.interlFrmStudentManager.moveToFront();
@@ -293,6 +292,7 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteStudent;
     private javax.swing.JButton btnNewStudent;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnUpdateStudent;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JInternalFrame interFrmcourseManager;

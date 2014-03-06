@@ -2,21 +2,25 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package SwingInterface;
+package DatabaseLayer;
 
-import DatabaseDriver.*;
+import java.awt.Dialog;
+import java.awt.Frame;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
+import javax.swing.JOptionPane;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author Tan
  */
-public class studentTableModel extends AbstractTableModel {
+public class StudentTableModel extends AbstractTableModel {
 
     private CachedRowSet studentsRowSet;
     private ResultSetMetaData metadata;
@@ -24,11 +28,11 @@ public class studentTableModel extends AbstractTableModel {
     private int noOfRow;
     private String[] headings;
 
-    public studentTableModel(CachedRowSet rowSetArg) {
+    public StudentTableModel(CachedRowSet rowSetArg) {
         try {
             this.studentsRowSet = rowSetArg;
             this.metadata = this.studentsRowSet.getMetaData();
-            
+
             this.noOfCol = metadata.getColumnCount();
             this.headings = new String[this.noOfCol];
 
@@ -38,14 +42,18 @@ public class studentTableModel extends AbstractTableModel {
                 this.noOfRow++;
             }
             this.studentsRowSet.beforeFirst();
-            
-            for(int i = 0; i < this.noOfCol; i ++){
-                this.headings[i] = this.metadata.getColumnName(i+1);
-            }
 
+            for (int i = 0; i < this.noOfCol; i++) {
+                this.headings[i] = this.metadata.getColumnName(i + 1);
+            }
+            
         } catch (SQLException ex) {
-            Logger.getLogger(studentTableModel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StudentTableModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public String[] getHeadings() {
+        return headings;
     }
 
     @Override
@@ -72,4 +80,22 @@ public class studentTableModel extends AbstractTableModel {
             return e.toString();
         }
     }
+    
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        if(columnIndex != 0)
+            return true;
+        else
+            return false;
+    }
+    
+    @Override
+    public String getColumnName(int column) {
+        try {
+            return this.metadata.getColumnLabel(column + 1);
+        } catch (SQLException e) {
+            return e.toString();
+        }
+    }
+
 }
