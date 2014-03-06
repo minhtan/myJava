@@ -4,17 +4,28 @@
  */
 package SwingInterface;
 
+import DatabaseDriver.*;
+import Manager.*;
+import java.beans.PropertyVetoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sql.rowset.CachedRowSet;
+
 /**
  *
  * @author Tan
  */
 public class MainFrame extends javax.swing.JFrame {
+    private DatabaseDriver dbDriver;
+    private studentTableModel stdTblMdl;
+    
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+        this.dbDriver = null;
     }
 
     /**
@@ -27,12 +38,14 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
-        studentManager = new javax.swing.JInternalFrame();
+        interlFrmStudentManager = new javax.swing.JInternalFrame();
         studentToolbar = new javax.swing.JToolBar();
         btnNewStudent = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        courseManager = new javax.swing.JInternalFrame();
+        btnUpdateStudent = new javax.swing.JButton();
+        btnDeleteStudent = new javax.swing.JButton();
+        studentScrollBar = new javax.swing.JScrollPane();
+        studentTable = new javax.swing.JTable();
+        interFrmcourseManager = new javax.swing.JInternalFrame();
         menuBar = new javax.swing.JMenuBar();
         menuOption = new javax.swing.JMenu();
         menuOptionConnect = new javax.swing.JMenuItem();
@@ -44,10 +57,12 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Student Manager");
 
-        studentManager.setClosable(true);
-        studentManager.setMaximizable(true);
-        studentManager.setTitle("Student Manager");
-        studentManager.setVisible(true);
+        interlFrmStudentManager.setClosable(true);
+        interlFrmStudentManager.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        interlFrmStudentManager.setMaximizable(true);
+        interlFrmStudentManager.setResizable(true);
+        interlFrmStudentManager.setTitle("Student Manager");
+        interlFrmStudentManager.setVisible(true);
 
         studentToolbar.setFloatable(false);
         studentToolbar.setRollover(true);
@@ -63,59 +78,77 @@ public class MainFrame extends javax.swing.JFrame {
         });
         studentToolbar.add(btnNewStudent);
 
-        jButton1.setText("Update");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        studentToolbar.add(jButton1);
+        btnUpdateStudent.setText("Update");
+        btnUpdateStudent.setFocusable(false);
+        btnUpdateStudent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnUpdateStudent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        studentToolbar.add(btnUpdateStudent);
 
-        jButton2.setText("Delete");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        studentToolbar.add(jButton2);
+        btnDeleteStudent.setText("Delete");
+        btnDeleteStudent.setFocusable(false);
+        btnDeleteStudent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDeleteStudent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        studentToolbar.add(btnDeleteStudent);
 
-        javax.swing.GroupLayout studentManagerLayout = new javax.swing.GroupLayout(studentManager.getContentPane());
-        studentManager.getContentPane().setLayout(studentManagerLayout);
-        studentManagerLayout.setHorizontalGroup(
-            studentManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(studentToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+        studentTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        studentScrollBar.setViewportView(studentTable);
+
+        javax.swing.GroupLayout interlFrmStudentManagerLayout = new javax.swing.GroupLayout(interlFrmStudentManager.getContentPane());
+        interlFrmStudentManager.getContentPane().setLayout(interlFrmStudentManagerLayout);
+        interlFrmStudentManagerLayout.setHorizontalGroup(
+            interlFrmStudentManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(studentToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+            .addComponent(studentScrollBar)
         );
-        studentManagerLayout.setVerticalGroup(
-            studentManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(studentManagerLayout.createSequentialGroup()
+        interlFrmStudentManagerLayout.setVerticalGroup(
+            interlFrmStudentManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(interlFrmStudentManagerLayout.createSequentialGroup()
                 .addComponent(studentToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 229, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(studentScrollBar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 164, Short.MAX_VALUE))
         );
 
-        studentManager.setBounds(180, 20, 210, 140);
-        desktopPane.add(studentManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        interlFrmStudentManager.setBounds(180, 20, 210, 140);
+        desktopPane.add(interlFrmStudentManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
         try {
-            studentManager.setMaximum(true);
+            interlFrmStudentManager.setMaximum(true);
         } catch (java.beans.PropertyVetoException e1) {
             e1.printStackTrace();
         }
 
-        courseManager.setClosable(true);
-        courseManager.setMaximizable(true);
-        courseManager.setTitle("Course Manager");
-        courseManager.setVisible(true);
+        interFrmcourseManager.setClosable(true);
+        interFrmcourseManager.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        interFrmcourseManager.setMaximizable(true);
+        interFrmcourseManager.setResizable(true);
+        interFrmcourseManager.setTitle("Course Manager");
+        interFrmcourseManager.setVisible(true);
 
-        javax.swing.GroupLayout courseManagerLayout = new javax.swing.GroupLayout(courseManager.getContentPane());
-        courseManager.getContentPane().setLayout(courseManagerLayout);
-        courseManagerLayout.setHorizontalGroup(
-            courseManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 384, Short.MAX_VALUE)
+        javax.swing.GroupLayout interFrmcourseManagerLayout = new javax.swing.GroupLayout(interFrmcourseManager.getContentPane());
+        interFrmcourseManager.getContentPane().setLayout(interFrmcourseManagerLayout);
+        interFrmcourseManagerLayout.setHorizontalGroup(
+            interFrmcourseManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 676, Short.MAX_VALUE)
         );
-        courseManagerLayout.setVerticalGroup(
-            courseManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 254, Short.MAX_VALUE)
+        interFrmcourseManagerLayout.setVerticalGroup(
+            interFrmcourseManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 415, Short.MAX_VALUE)
         );
 
-        courseManager.setBounds(0, 0, 180, 140);
-        desktopPane.add(courseManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        interFrmcourseManager.setBounds(0, 0, 180, 140);
+        desktopPane.add(interFrmcourseManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
         try {
-            courseManager.setMaximum(true);
+            interFrmcourseManager.setMaximum(true);
         } catch (java.beans.PropertyVetoException e1) {
             e1.printStackTrace();
         }
@@ -133,6 +166,11 @@ public class MainFrame extends javax.swing.JFrame {
         menuOption.add(menuOptionConnect);
 
         menuOptionExit.setText("Exit");
+        menuOptionExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOptionExitActionPerformed(evt);
+            }
+        });
         menuOption.add(menuOptionExit);
 
         menuBar.add(menuOption);
@@ -140,6 +178,11 @@ public class MainFrame extends javax.swing.JFrame {
         menuManage.setText("Manage");
 
         menuManageStudent.setText("Students");
+        menuManageStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuManageStudentActionPerformed(evt);
+            }
+        });
         menuManage.add(menuManageStudent);
 
         menuManageCourse.setText("Courses");
@@ -153,11 +196,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
         );
 
         pack();
@@ -167,15 +210,47 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         DBInfoForm dialog = new DBInfoForm(this, true); 
         if(dialog.getSignal()){
-            System.out.println(dialog.getTxtPsw());
-            System.out.println(dialog.getTxtServer());
-            System.out.println(dialog.getTxtUserName());
+            this.dbDriver = new DatabaseDriver(dialog.getTxtServer(), dialog.getTxtUserName(), dialog.getTxtPsw());
         }
     }//GEN-LAST:event_menuOptionConnectActionPerformed
 
     private void btnNewStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewStudentActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnNewStudentActionPerformed
+
+    private void menuOptionExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOptionExitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_menuOptionExitActionPerformed
+
+    private void menuManageStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManageStudentActionPerformed
+        // TODO add your handling code here:
+        if(this.dbDriver != null){
+            if(this.interlFrmStudentManager.isVisible() == false){
+                try {
+                    CachedRowSet studentRowSet = this.dbDriver.selectFrom("Students");
+                    this.stdTblMdl = new studentTableModel(studentRowSet);
+                    this.studentTable.setModel(stdTblMdl);
+                    
+                    this.interlFrmStudentManager.setVisible(true);
+                    this.interlFrmStudentManager.moveToFront();
+                    this.interlFrmStudentManager.setSelected(true);
+                } catch (PropertyVetoException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                try {
+                    this.interlFrmStudentManager.moveToFront();
+                    this.interlFrmStudentManager.setSelected(true);
+                } catch (PropertyVetoException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }else{
+            this.menuOptionConnectActionPerformed(evt);
+            this.menuManageStudentActionPerformed(evt);
+        }
+    }//GEN-LAST:event_menuManageStudentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -209,18 +284,19 @@ public class MainFrame extends javax.swing.JFrame {
             public void run() {
                 MainFrame mainFrame = new MainFrame();
                 mainFrame.setVisible(true);
-                mainFrame.studentManager.setVisible(false);
-                mainFrame.courseManager.setVisible(false);
+                mainFrame.interlFrmStudentManager.setVisible(false);
+                mainFrame.interFrmcourseManager.setVisible(false);
             }
         });
         
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDeleteStudent;
     private javax.swing.JButton btnNewStudent;
-    private javax.swing.JInternalFrame courseManager;
+    private javax.swing.JButton btnUpdateStudent;
     private javax.swing.JDesktopPane desktopPane;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JInternalFrame interFrmcourseManager;
+    private javax.swing.JInternalFrame interlFrmStudentManager;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuManage;
     private javax.swing.JMenuItem menuManageCourse;
@@ -228,7 +304,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu menuOption;
     private javax.swing.JMenuItem menuOptionConnect;
     private javax.swing.JMenuItem menuOptionExit;
-    private javax.swing.JInternalFrame studentManager;
+    private javax.swing.JScrollPane studentScrollBar;
+    private javax.swing.JTable studentTable;
     private javax.swing.JToolBar studentToolbar;
     // End of variables declaration//GEN-END:variables
 }

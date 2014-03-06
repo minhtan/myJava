@@ -12,7 +12,6 @@ import java.util.ArrayList;
  *
  * @author tan
  */
-public class Manager {
-    private ArrayList list;
+public class StudentManager {
     
 }
