@@ -4,9 +4,11 @@
  */
 package DatabaseLayer;
 
+//import com.sun.rowset.CachedRowSetImpl;
 import com.sun.rowset.CachedRowSetImpl;
 import java.sql.SQLException;
 import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetProvider;
 
 /**
  *
@@ -16,7 +18,7 @@ public class DatabaseDriver {
     private String server;
     private String username;
     private String psw;
-    private CachedRowSet crs;
+    private CachedRowSetImpl crs;
 
     public DatabaseDriver(String server, String username, String psw) throws SQLException {
         this.server = server;
@@ -24,13 +26,15 @@ public class DatabaseDriver {
         this.psw = psw;
         
         this.crs = new CachedRowSetImpl();
+        //this.crs = RowSetProvider.newFactory().createCachedRowSet();
         this.crs.setUrl("jdbc:sqlserver://" + this.server + ";Database=db_student");
         this.crs.setUsername(this.username);
         this.crs.setPassword(this.psw);
     }
     
-    public CachedRowSet selectFrom(String table) throws SQLException{
-        CachedRowSet newCrs = new CachedRowSetImpl();
+    public CachedRowSetImpl selectFrom(String table) throws SQLException{
+        CachedRowSetImpl newCrs = new CachedRowSetImpl();
+        //CachedRowSet newCrs = RowSetProvider.newFactory().createCachedRowSet();
         newCrs.setUrl("jdbc:sqlserver://" + this.server + ";Database=db_student");
         newCrs.setUsername(this.username);
         newCrs.setPassword(this.psw);

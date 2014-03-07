@@ -50,18 +50,18 @@ public class DBInfoForm extends java.awt.Dialog {
             }
         });
 
-        txtServer.setText("LAB2_SERVER\\SQL2008");
+        txtServer.setText("TAN-PC\\SQLEXPRESS");
 
         lblServer1.setText("Server name");
 
         lblUserName.setText("User name");
 
-        txtUserName.setText("sa");
+        txtUserName.setText("admin");
         txtUserName.setToolTipText("");
 
         lblPsw.setText("Password");
 
-        txtPsw.setText("fat123456");
+        txtPsw.setText("admin123");
 
         btnExit.setText("Close");
         btnExit.addActionListener(new java.awt.event.ActionListener() {

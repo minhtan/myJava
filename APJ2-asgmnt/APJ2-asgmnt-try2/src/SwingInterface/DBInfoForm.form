@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.8" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.DialogFormInfo">
+<Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.DialogFormInfo">
   <Properties>
     <Property name="resizable" type="boolean" value="false"/>
     <Property name="title" type="java.lang.String" value="Database Information"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="closeDialog"/>
@@ -96,7 +97,7 @@
       <SubComponents>
         <Component class="javax.swing.JTextField" name="txtServer">
           <Properties>
-            <Property name="text" type="java.lang.String" value="LAB2_SERVER\u005cSQL2008" containsInvalidXMLChars="true"/>
+            <Property name="text" type="java.lang.String" value="TAN-PC\u005cSQLEXPRESS" containsInvalidXMLChars="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblServer1">
@@ -111,7 +112,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtUserName">
           <Properties>
-            <Property name="text" type="java.lang.String" value="sa"/>
+            <Property name="text" type="java.lang.String" value="admin"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
@@ -122,7 +123,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtPsw">
           <Properties>
-            <Property name="text" type="java.lang.String" value="fat123456"/>
+            <Property name="text" type="java.lang.String" value="admin123"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnExit">

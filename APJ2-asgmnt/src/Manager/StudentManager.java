@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
+import com.sun.rowset.CachedRowSetImpl;
 import javax.sql.rowset.spi.SyncProviderException;
 
 /**
@@ -22,7 +23,8 @@ import javax.sql.rowset.spi.SyncProviderException;
 public class StudentManager {
     private DatabaseDriver dbDriver;
     private StudentTableModel stdTblMdl;
-    private CachedRowSet studentRowSet;
+    //private CachedRowSet studentRowSet;
+    private CachedRowSetImpl studentRowSet;
 
     public StudentManager(DatabaseDriver dbDriver) {
         this.dbDriver = dbDriver;
@@ -41,20 +43,26 @@ public class StudentManager {
         try {
             this.studentRowSet.moveToInsertRow();
             this.studentRowSet.updateString("Name", "New Student");
+            this.studentRowSet.updateString("Address", "New Student address");
+            this.studentRowSet.updateString("Tel_no", "New Student tel");
+            this.studentRowSet.updateString("DOB", "1987-12-30");
+            this.studentRowSet.updateString("Sex", "M");
+            
             this.studentRowSet.insertRow();
             this.studentRowSet.moveToCurrentRow();
         } catch (SQLException e) {
-            do {
-                System.out.println("SQLState:" + e.getSQLState());
-                System.out.println("Error Code:" + e.getErrorCode());
-                System.out.println("Message:" + e.getMessage());
-                Throwable t = e.getCause();
-                while (t != null) {
-                    System.out.println("Cause:" + t);
-                    t = t.getCause();
-                }
-                e = e.getNextException();
-            } while (e != null);
+            e.printStackTrace();
+//            do {
+//                System.out.println("SQLState:" + e.getSQLState());
+//                System.out.println("Error Code:" + e.getErrorCode());
+//                System.out.println("Message:" + e.getMessage());
+//                Throwable t = e.getCause();
+//                while (t != null) {
+//                    System.out.println("Cause:" + t);
+//                    t = t.getCause();
+//                }
+//                e = e.getNextException();
+//            } while (e != null);
         }
     }
     
