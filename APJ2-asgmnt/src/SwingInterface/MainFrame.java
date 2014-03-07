@@ -7,9 +7,11 @@ package SwingInterface;
 import DatabaseLayer.DatabaseDriver;
 import Manager.*;
 import java.beans.PropertyVetoException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.table.TableColumn;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -18,6 +20,8 @@ import javax.swing.table.TableColumn;
 public class MainFrame extends javax.swing.JFrame {
     private DatabaseDriver dbDriver;
     private StudentManager stdMng;
+    private JScrollPane studentScrollpane;
+    private StudentTable studentTable;
     
     /**
      * Creates new form MainFrame
@@ -44,8 +48,6 @@ public class MainFrame extends javax.swing.JFrame {
         btnUpdateStudent = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
         btnDeleteStudent = new javax.swing.JButton();
-        studentScrollBar = new javax.swing.JScrollPane();
-        studentTable = new javax.swing.JTable();
         interFrmcourseManager = new javax.swing.JInternalFrame();
         menuBar = new javax.swing.JMenuBar();
         menuOption = new javax.swing.JMenu();
@@ -82,6 +84,11 @@ public class MainFrame extends javax.swing.JFrame {
         btnUpdateStudent.setFocusable(false);
         btnUpdateStudent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnUpdateStudent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnUpdateStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateStudentActionPerformed(evt);
+            }
+        });
         studentToolbar.add(btnUpdateStudent);
 
         btnRefresh.setText("Refresh");
@@ -96,31 +103,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnDeleteStudent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         studentToolbar.add(btnDeleteStudent);
 
-        studentScrollBar.setViewportView(studentTable);
-
-        javax.swing.GroupLayout interlFrmStudentManagerLayout = new javax.swing.GroupLayout(interlFrmStudentManager.getContentPane());
-        interlFrmStudentManager.getContentPane().setLayout(interlFrmStudentManagerLayout);
-        interlFrmStudentManagerLayout.setHorizontalGroup(
-            interlFrmStudentManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(studentToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
-            .addComponent(studentScrollBar)
-        );
-        interlFrmStudentManagerLayout.setVerticalGroup(
-            interlFrmStudentManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(interlFrmStudentManagerLayout.createSequentialGroup()
-                .addComponent(studentToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(studentScrollBar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-
-        desktopPane.add(interlFrmStudentManager);
-        interlFrmStudentManager.setBounds(180, 20, 210, 140);
-        try {
-            interlFrmStudentManager.setMaximum(true);
-        } catch (java.beans.PropertyVetoException e1) {
-            e1.printStackTrace();
-        }
+        interlFrmStudentManager.getContentPane().add(studentToolbar, java.awt.BorderLayout.NORTH);
 
         interFrmcourseManager.setClosable(true);
         interFrmcourseManager.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
@@ -136,11 +119,29 @@ public class MainFrame extends javax.swing.JFrame {
         );
         interFrmcourseManagerLayout.setVerticalGroup(
             interFrmcourseManagerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 409, Short.MAX_VALUE)
+            .addGap(0, 491, Short.MAX_VALUE)
         );
 
-        desktopPane.add(interFrmcourseManager);
-        interFrmcourseManager.setBounds(0, 0, 180, 140);
+        javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
+        desktopPane.setLayout(desktopPaneLayout);
+        desktopPaneLayout.setHorizontalGroup(
+            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(interlFrmStudentManager)
+            .addComponent(interFrmcourseManager, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        desktopPaneLayout.setVerticalGroup(
+            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(interlFrmStudentManager)
+            .addComponent(interFrmcourseManager, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        desktopPane.setLayer(interlFrmStudentManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        try {
+            interlFrmStudentManager.setMaximum(true);
+        } catch (java.beans.PropertyVetoException e1) {
+            e1.printStackTrace();
+        }
+        desktopPane.setLayer(interFrmcourseManager, javax.swing.JLayeredPane.DEFAULT_LAYER);
         try {
             interFrmcourseManager.setMaximum(true);
         } catch (java.beans.PropertyVetoException e1) {
@@ -151,6 +152,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         menuOption.setText("Option");
 
+        menuOptionConnect.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.ALT_MASK));
         menuOptionConnect.setText("Connect");
         menuOptionConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,6 +161,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         menuOption.add(menuOptionConnect);
 
+        menuOptionExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
         menuOptionExit.setText("Exit");
         menuOptionExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,6 +174,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         menuManage.setText("Manage");
 
+        menuManageStudent.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
         menuManageStudent.setText("Students");
         menuManageStudent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,6 +183,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         menuManage.add(menuManageStudent);
 
+        menuManageCourse.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         menuManageCourse.setText("Courses");
         menuManage.add(menuManageCourse);
 
@@ -190,11 +195,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+            .addComponent(desktopPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+            .addComponent(desktopPane)
         );
 
         pack();
@@ -204,12 +209,18 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         DBInfoForm dialog = new DBInfoForm(this, true); 
         if(dialog.getSignal()){
-            this.dbDriver = new DatabaseDriver(dialog.getTxtServer(), dialog.getTxtUserName(), dialog.getTxtPsw());
+            try {
+                this.dbDriver = new DatabaseDriver(dialog.getTxtServer(), dialog.getTxtUserName(), dialog.getTxtPsw());
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog( this, new String("Unable to connect to database." ) );
+            }
         }
     }//GEN-LAST:event_menuOptionConnectActionPerformed
 
     private void btnNewStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewStudentActionPerformed
         // TODO add your handling code here:
+        this.stdMng.insertRow();
+        this.studentTable.setModel(this.stdMng.getStdTblMdl());
     }//GEN-LAST:event_btnNewStudentActionPerformed
 
     private void menuOptionExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOptionExitActionPerformed
@@ -222,20 +233,22 @@ public class MainFrame extends javax.swing.JFrame {
         if(this.dbDriver != null){
             if(this.interlFrmStudentManager.isVisible() == false){
                 try {
-                    this.stdMng = new StudentManager(this.dbDriver);        
-                    this.studentTable.setModel(this.stdMng.listStudent());
+                    this.stdMng = new StudentManager(this.dbDriver);  
+                    this.stdMng.listStudent();
                     
-                    for (int i = 0; i < this.studentTable.getColumnCount(); i++) {
-                        TableColumn columnTemp = this.studentTable.getTableHeader().getColumnModel().getColumn(i);
-                        columnTemp.setHeaderValue(this.stdMng.getStdTblMdl().getHeadings()[i]);
-                    }
-                   this.studentTable.getTableHeader() .setReorderingAllowed(false);
+                    this.studentScrollpane= new JScrollPane();
+                    this.studentTable = new StudentTable(this.stdMng.getStdTblMdl());
+                    
+                    this.studentScrollpane.setViewportView(this.studentTable);
+                    this.interlFrmStudentManager.getContentPane().add(this.studentScrollpane, java.awt.BorderLayout.CENTER);
                     
                     this.interlFrmStudentManager.setVisible(true);
                     this.interlFrmStudentManager.moveToFront();
                     this.interlFrmStudentManager.setSelected(true);
                 } catch (PropertyVetoException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog( this, new String("Unable to connect to database.") );
                 }
             }else{
                 try {
@@ -250,6 +263,11 @@ public class MainFrame extends javax.swing.JFrame {
             this.menuManageStudentActionPerformed(evt);
         }
     }//GEN-LAST:event_menuManageStudentActionPerformed
+
+    private void btnUpdateStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStudentActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnUpdateStudentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,6 +298,7 @@ public class MainFrame extends javax.swing.JFrame {
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 MainFrame mainFrame = new MainFrame();
                 mainFrame.setVisible(true);
@@ -304,8 +323,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu menuOption;
     private javax.swing.JMenuItem menuOptionConnect;
     private javax.swing.JMenuItem menuOptionExit;
-    private javax.swing.JScrollPane studentScrollBar;
-    private javax.swing.JTable studentTable;
     private javax.swing.JToolBar studentToolbar;
     // End of variables declaration//GEN-END:variables
 }

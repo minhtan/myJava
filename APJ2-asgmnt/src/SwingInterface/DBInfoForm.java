@@ -50,7 +50,7 @@ public class DBInfoForm extends java.awt.Dialog {
             }
         });
 
-        txtServer.setText("TAN\\SQLEXPRESS");
+        txtServer.setText("TAN-PC\\SQLEXPRESS");
 
         lblServer1.setText("Server name");
 

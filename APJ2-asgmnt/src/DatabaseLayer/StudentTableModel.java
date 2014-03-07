@@ -4,14 +4,12 @@
  */
 package DatabaseLayer;
 
-import java.awt.Dialog;
-import java.awt.Frame;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.rowset.CachedRowSet;
-import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -20,13 +18,14 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Tan
  */
-public class StudentTableModel extends AbstractTableModel {
+public class StudentTableModel extends AbstractTableModel implements TableModelListener{
 
     private CachedRowSet studentsRowSet;
     private ResultSetMetaData metadata;
     private int noOfCol;
     private int noOfRow;
     private String[] headings;
+    private ArrayList rowList;
 
     public StudentTableModel(CachedRowSet rowSetArg) {
         try {
@@ -45,13 +44,15 @@ public class StudentTableModel extends AbstractTableModel {
 
             for (int i = 0; i < this.noOfCol; i++) {
                 this.headings[i] = this.metadata.getColumnName(i + 1);
-            }
+            }     
+            
+            this.addTableModelListener(this);
             
         } catch (SQLException ex) {
             Logger.getLogger(StudentTableModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
+    }  
+    
     public String[] getHeadings() {
         return headings;
     }
@@ -96,6 +97,16 @@ public class StudentTableModel extends AbstractTableModel {
         } catch (SQLException e) {
             return e.toString();
         }
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+        int row = e.getFirstRow();
+        int column = e.getColumn();
+        Object data = this.getValueAt(row, column);
+        this.setValueAt(data, row, column);
+        this.fireTableDataChanged();
+        System.out.println(row + " " + column + " " + data.toString());
     }
 
 }

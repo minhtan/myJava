@@ -97,7 +97,7 @@
       <SubComponents>
         <Component class="javax.swing.JTextField" name="txtServer">
           <Properties>
-            <Property name="text" type="java.lang.String" value="TAN\u005cSQLEXPRESS" containsInvalidXMLChars="true"/>
+            <Property name="text" type="java.lang.String" value="TAN-PC\u005cSQLEXPRESS" containsInvalidXMLChars="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblServer1">
