@@ -6,7 +6,6 @@
 
 package SwingInterface;
 
-import Manager.StudentManager;
 import Model.StudentTableModel;
 import java.sql.SQLException;
 import javax.swing.JTable;
@@ -17,22 +16,10 @@ import static javax.swing.ListSelectionModel.*;
  * @author Tan
  */
 public class StudentTable extends JTable{
-    private StudentManager stdMng;
-    private StudentTableModel stdTblMdl;
-    
-    public StudentTable(StudentManager stdMng) throws SQLException {
-        this.stdMng = stdMng;
-        this.stdTblMdl = new StudentTableModel(
-                this.stdMng.listStudent(), 
-                this.stdMng.getStudentProperties()
-        );
-        this.setModel(this.stdTblMdl);
+
+    public StudentTable(StudentTableModel stdTblMdl) throws SQLException {
+        this.setModel(stdTblMdl);
         this.setSelectionMode(SINGLE_SELECTION);
     }    
 
-    public StudentManager getStdMng() {
-        return stdMng;
-    }
-    
-    
 }

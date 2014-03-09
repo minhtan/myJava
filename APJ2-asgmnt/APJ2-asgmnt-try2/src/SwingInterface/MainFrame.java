@@ -9,13 +9,14 @@ import DatabaseLayer.DbAccess;
 import DatabaseLayer.DbQuery;
 import Manager.StudentManager;
 import Model.Student;
+import Model.StudentTableModel;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.*;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -29,6 +30,7 @@ public class MainFrame extends javax.swing.JFrame {
     private StudentManager stdMng;
     private JScrollPane stdScrlPane;
     private StudentTable stdTbl;
+    private StudentTableModel stdTblMdl;
     private DbAccess dbAccess;
 
     /**
@@ -47,7 +49,6 @@ public class MainFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         paneCenter = new javax.swing.JPanel();
         desktopPane = new javax.swing.JDesktopPane();
@@ -93,7 +94,6 @@ public class MainFrame extends javax.swing.JFrame {
         interFrmStudent.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         interFrmStudent.setIconifiable(true);
         interFrmStudent.setMaximizable(true);
-        interFrmStudent.setResizable(true);
         interFrmStudent.setVisible(true);
 
         toolbarStd.setFloatable(false);
@@ -114,12 +114,22 @@ public class MainFrame extends javax.swing.JFrame {
         btnRefresh.setFocusable(false);
         btnRefresh.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnRefresh.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
         toolbarStd.add(btnRefresh);
 
         btnDelete.setText("Delete");
         btnDelete.setFocusable(false);
         btnDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
         toolbarStd.add(btnDelete);
 
         interFrmStudent.getContentPane().add(toolbarStd, java.awt.BorderLayout.NORTH);
@@ -165,9 +175,9 @@ public class MainFrame extends javax.swing.JFrame {
         lblStdInfoDoB.setText("Date of birth");
         panelStdInfo1.add(lblStdInfoDoB);
 
-        ftxtStdInfoDoB.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("yyyy-MM-dd"))));
-        ftxtStdInfoDoB.setText("YYYY-MM-DDDD");
+        ftxtStdInfoDoB.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("YYYY-MM-dd"))));
         ftxtStdInfoDoB.setToolTipText("this input must be in YYYY-MM-DDDD format");
+        ftxtStdInfoDoB.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
         panelStdInfo1.add(ftxtStdInfoDoB);
 
         lblStdInfoSex.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -205,6 +215,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         btnDiscard.setText("Discard");
         btnDiscard.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDiscard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDiscardActionPerformed(evt);
+            }
+        });
         panelStdBtn.add(btnDiscard);
 
         panelStdBottom.add(panelStdBtn, java.awt.BorderLayout.SOUTH);
@@ -284,8 +299,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
-        int lastID = this.stdMng.getStudent(this.stdMng.getLastIndex()-1).getId();
-        Student std = new Student(lastID, "New student", null, null, null, 0);
+        int newID = this.stdMng.getLastId()+1;
+        Student std = new Student(newID, "New student", null, null, null, 0);
 
         this.updateStudentInfo(std);
         this.txtStdInfoName.requestFocus();
@@ -297,10 +312,15 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_menuOptionExitActionPerformed
 
     private void studentTableRowChange(ListSelectionEvent event) {
-        int selectedRow = this.stdTbl.getSelectedRow();
-        Student std = this.stdMng.getStudent(selectedRow);
-        
-        this.updateStudentInfo(std);
+        try{
+            int selectedRow = this.stdTbl.getSelectedRow();
+            Student std = this.stdMng.getStudent(selectedRow);
+
+            this.updateStudentInfo(std);
+        }catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("selected row: " + this.stdTbl.getSelectedRow());
+//            e.printStackTrace();
+        }
     }
     
     private void updateStudentInfo(Student std){
@@ -312,16 +332,11 @@ public class MainFrame extends javax.swing.JFrame {
         if (std.getDob() != null) {
             this.ftxtStdInfoDoB.setText(std.getDob());
         } else {
-            this.ftxtStdInfoDoB.setText("YYYY-MM-DDDD");
+            this.ftxtStdInfoDoB.setText("");
         }
+        
+        this.cbbStdInfoSex.setSelectedIndex(std.getSex());
 
-        if (std.getSex() == 1) {
-            this.cbbStdInfoSex.setSelectedIndex(1);
-        } else if (std.getSex() == 2) {
-            this.cbbStdInfoSex.setSelectedIndex(2);
-        } else {
-            this.cbbStdInfoSex.setSelectedIndex(0);
-        }
     }
     
     private void menuManageStdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuManageStdActionPerformed
@@ -333,7 +348,11 @@ public class MainFrame extends javax.swing.JFrame {
                     ResultSet rs = dbQuery.selectFrom("Students");
 
                     this.stdMng = new StudentManager(rs);
-                    this.stdTbl = new StudentTable(stdMng);
+                    this.stdTblMdl = new StudentTableModel(
+                            this.stdMng.listStudent(),
+                            this.stdMng.getStudentProperties()
+                    );
+                    this.stdTbl = new StudentTable(this.stdTblMdl);
                     this.stdTbl.getTableHeader().setReorderingAllowed(false);
                     this.stdTbl.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
                         @Override
@@ -362,11 +381,147 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuManageStdActionPerformed
 
+    private boolean checkDateFormat(String date){
+        if(date == null){
+            return true;
+        }else{
+            String pattern = "[0-9][0-9][0-9][0-9]-[0-1][1-9]-[0-3][0-9]";
+            return date.matches(pattern);
+        }
+    }
+    
+    private String[] getSelectedStudentInfo(){
+        String[] data = new String[5];
+
+        data[0] = checkNullString(this.txtStdInfoName.getText());
+        data[1] = checkNullString(this.txtStdInfoAddress.getText());
+        data[2] = checkNullString(this.txtStdInfoTel.getText());
+        data[3] = checkNullString(this.ftxtStdInfoDoB.getText());
+        switch (this.cbbStdInfoSex.getSelectedIndex()) {
+            case 1:
+                data[4] = "M";
+                break;
+            case 2:
+                data[4] = "F";
+                break;
+            default:
+                data[4] = null;
+                break;
+        }
+        
+        return data;
+    }
+    
+    private void updateStudent(){
+        int selectedRow = this.stdTbl.getSelectedRow();
+        if(selectedRow > 0 && selectedRow <= this.stdMng.getLastIndex()){
+//            if(JOptionPane.showConfirmDialog(this, new String("Confirm update student?")) == YES_OPTION){   
+                try {
+                    int id;
+                    String[] data = getSelectedStudentInfo();
+                    id = Integer.parseInt(this.txtStdInfoId.getText());
+                    
+                    DbQuery dbQuery = new DbQuery(this.dbAccess);
+                    dbQuery.updateStudent(data[0], data[1], data[2], data[3], data[4], id);
+                    
+                    Student std = new Student(id, data[0], data[1], data[2], data[3], this.cbbStdInfoSex.getSelectedIndex());
+                    this.stdMng.updateStudentAt(selectedRow, std);
+                    this.stdTblMdl.updateRowAt(selectedRow, std);
+                    
+                    this.stdTblMdl.fireTableDataChanged();
+                    this.stdTbl.setRowSelectionInterval(selectedRow, selectedRow);
+                } catch (SQLException ex) {
+                    System.out.println("Update table Students failed");
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+//            }
+        }
+    }
+    
+    private void addNewStudent(){
+        int id;
+        String[] data = getSelectedStudentInfo();
+        id = Integer.parseInt(this.txtStdInfoId.getText());
+
+        Student std = new Student(id, data[0], data[1], data[2], data[3], this.cbbStdInfoSex.getSelectedIndex());
+        this.stdMng.addStudent(std);
+        this.stdTblMdl.addRow(std);
+
+        DbQuery dbQuery = new DbQuery(dbAccess);
+        try {
+            dbQuery.insertToStudent(data[0], data[1], data[2], data[3], data[4]);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Insert to table 'student' failed");
+        }
+    }
+    
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-
+        if(checkNullString(this.txtStdInfoId.getText()) != null){
+            if (checkDateFormat(checkNullString(this.ftxtStdInfoDoB.getText()))){
+                if (Integer.parseInt(this.txtStdInfoId.getText()) > this.stdMng.getLastId()){
+                    if(JOptionPane.showConfirmDialog(this, new String("Confirm insert new student?")) == YES_OPTION)
+                        this.stdTbl.clearSelection();
+                        addNewStudent();                       
+                        this.stdTblMdl.fireTableDataChanged();
+                        this.stdTbl.setRowSelectionInterval(this.stdMng.getLastIndex(), this.stdMng.getLastIndex());
+                }else {
+                    this.updateStudent();
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, new String("Date must be in format: YYYY-MM-DD"));
+                this.ftxtStdInfoDoB.setText("");
+                this.ftxtStdInfoDoB.requestFocus();
+            }
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        if (this.stdTbl.getSelectedRow() != -1 && this.stdTbl.getSelectedRow() < this.stdMng.getLastId()+1){
+            int selectedRow = this.stdTbl.getSelectedRow();
+            if(JOptionPane.showConfirmDialog(this, new String("Confirm delete student?")) == YES_OPTION){
+                try {
+                    DbQuery dbQuery = new DbQuery(this.dbAccess);
+                    dbQuery.deleteRow("Students", "Student_ID", this.txtStdInfoId.getText());
+                    this.stdMng.removeStudent(selectedRow);
+                    if(selectedRow > 1)
+                        this.stdTbl.setRowSelectionInterval(selectedRow-1, selectedRow-1);
+                    else
+                        this.stdTbl.setRowSelectionInterval(1, 1);
+                    this.stdTblMdl.removeRow(selectedRow);
+                } catch (SQLException ex) {
+                    System.out.println("Delete from table Students failed");
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }               
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        this.stdTblMdl.fireTableDataChanged();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscardActionPerformed
+        // TODO add your handling code here:
+        this.txtStdInfoId.setText("");
+        this.txtStdInfoName.setText("");
+        this.txtStdInfoAddress.setText("");
+        this.txtStdInfoTel.setText("");
+        this.ftxtStdInfoDoB.setText("");
+        this.cbbStdInfoSex.setSelectedIndex(0);
+        this.stdTbl.clearSelection();
+    }//GEN-LAST:event_btnDiscardActionPerformed
+    
+    private String checkNullString(String string){
+        if ("".equals(string) || " ".equals(string) || string == null){
+            return null;
+        } else
+            return string;
+    }
+    
     /**
      * @param args the command line arguments
      */

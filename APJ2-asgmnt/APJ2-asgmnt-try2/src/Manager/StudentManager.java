@@ -19,6 +19,7 @@ public class StudentManager {
     private ResultSet rs;
     private ArrayList<Student> studentList;
     private String[] studentProperties;
+    private int lastID;
 
     public StudentManager(ResultSet rs) throws SQLException {
         this.rs = rs;
@@ -44,24 +45,39 @@ public class StudentManager {
             );
             this.studentList.add(student); 
         }
+        this.rs.close();
+        this.lastID = this.getStudent(this.studentList.size()-1).getId();
         return this.studentList;
     }
     
     public Student getStudent(int i){
         return this.studentList.get(i);
     }
+    
         
     public void addStudent(Student std){
         this.studentList.add(std);
+        this.lastID ++;
+    }
+    
+    public void updateStudentAt(int i, Student std){
+        this.studentList.remove(i);
+        this.studentList.add(i, std);
+    }
+    
+    public void removeStudent(int i){
+        this.studentList.remove(i);
     }
     
     public int getLastIndex(){
-        return this.studentList.size();
+        return this.studentList.size()-1;
     }
     
     public String[] getStudentProperties() {
         return studentProperties;
     }
     
-    
+    public int getLastId(){
+        return this.lastID;
+    }
 }

@@ -45,4 +45,29 @@ public final class StudentTableModel extends DefaultTableModel{
         return false;
     }
     
+    public void updateRowAt(int i, Student student){
+        this.removeRow(i);
+        this.insertRow(
+                i, 
+                new Object[]{
+                    student.getId(),
+                    student.getName(),
+                    student.getAddress(),
+                    student.getTelNo(),
+                    student.getDob(),
+                    (student.getSex() != 0 ? (student.getSex() == 1 ? "Male" : "Female") : null)
+                }
+        );
+    }
+    
+    public void addRow(Student student){
+        this.addRow(new Object[]{
+            student.getId(),
+            student.getName(),
+            student.getAddress(),
+            student.getTelNo(),
+            student.getDob(),
+            (student.getSex() != 0 ? (student.getSex() == 1 ? "Male" : "Female") : null)
+        });
+    }
 }

@@ -62,8 +62,23 @@ VALUES
 	(1, 1, '2002-12-2'),
 	(1, 2, '2004-12-2'),
 	(2, 3, '2006-12-2')
+/*
 go 
 INSERT INTO Marks (Mark, [Date], StudentCourse_ID)
 VALUES
 	(4, '2003-12-3', 1),
 	(5, '2005-02-2', 2)
+*/
+go
+CREATE TRIGGER trg_StudentCourse_delete 
+ON Students
+INSTEAD OF DELETE 
+AS BEGIN
+	DELETE FROM StudentCourses
+    WHERE Student_ID IN (SELECT Student_ID FROM DELETED)
+
+	DELETE Students
+    FROM DELETED D
+    INNER JOIN Students T ON T.Student_ID = D.Student_ID
+END
+
