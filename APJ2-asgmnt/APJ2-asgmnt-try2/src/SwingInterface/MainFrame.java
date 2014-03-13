@@ -284,9 +284,9 @@ public class MainFrame extends javax.swing.JFrame {
         if (dialog.getSignal()) {
             try {
                 this.dbAccess = new DbAccess(
-                        "admin",
-                        "admin123",
-                        "TAN-PC\\SQLEXPRESS"
+                        dialog.getTxtUserName(),
+                        dialog.getTxtPsw(),
+                        dialog.getTxtServer()
                 );
                 Connection conn = this.dbAccess.getConnection();
                 conn.close();

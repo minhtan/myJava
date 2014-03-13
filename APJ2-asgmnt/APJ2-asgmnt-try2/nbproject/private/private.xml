@@ -5,9 +5,10 @@
         <group>
             <file>file:/C:/Users/Tan/Desktop/myJava/APJ2-asgmnt/APJ2-asgmnt-try2/src/SwingInterface/StudentTable.java</file>
             <file>file:/C:/Users/Tan/Desktop/myJava/APJ2-asgmnt/APJ2-asgmnt-try2/src/Manager/StudentManager.java</file>
-            <file>file:/C:/Users/Tan/Desktop/myJava/APJ2-asgmnt/APJ2-asgmnt-try2/src/Model/StudentTableModel.java</file>
             <file>file:/C:/Users/Tan/Desktop/myJava/APJ2-asgmnt/APJ2-asgmnt-try2/src/DatabaseLayer/DbQuery.java</file>
+            <file>file:/C:/Users/Tan/Desktop/myJava/APJ2-asgmnt/APJ2-asgmnt-try2/src/Model/StudentTableModel.java</file>
             <file>file:/C:/Users/Tan/Desktop/myJava/APJ2-asgmnt/APJ2-asgmnt-try2/src/SwingInterface/MainFrame.java</file>
+            <file>file:/C:/Users/Tan/Desktop/myJava/APJ2-asgmnt/APJ2-asgmnt-try2/src/DatabaseLayer/DbAccess.java</file>
             <file>file:/C:/Users/Tan/Desktop/myJava/APJ2-asgmnt/APJ2-asgmnt-try2/src/Model/Student.java</file>
         </group>
     </open-files>
