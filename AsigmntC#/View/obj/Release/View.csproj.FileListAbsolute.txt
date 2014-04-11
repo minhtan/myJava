@@ -1,0 +1,4 @@
+C:\Users\Tan\Desktop\myJava\AsigmntC#\View\bin\Release\View.dll
+C:\Users\Tan\Desktop\myJava\AsigmntC#\View\bin\Release\View.pdb
+C:\Users\Tan\Desktop\myJava\AsigmntC#\View\obj\Release\View.dll
+C:\Users\Tan\Desktop\myJava\AsigmntC#\View\obj\Release\View.pdb

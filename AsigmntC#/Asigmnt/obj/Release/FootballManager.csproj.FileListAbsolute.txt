@@ -1,0 +1,12 @@
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Release\Asigmnt.exe.config
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Release\Asigmnt.exe
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Release\Asigmnt.pdb
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Release\Control.dll
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Release\Models.dll
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Release\View.dll
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Release\Control.pdb
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Release\Models.pdb
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Release\View.pdb
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\obj\Release\FootballManager.csprojResolveAssemblyReference.cache
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\obj\Release\Asigmnt.exe
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Asigmnt\obj\Release\Asigmnt.pdb

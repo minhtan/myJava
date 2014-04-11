@@ -10,6 +10,6 @@ D:\OneDrive\VS\Asigmnt\View\obj\Debug\View.dll
 D:\OneDrive\VS\Asigmnt\View\obj\Debug\View.pdb
 C:\Users\tan\Desktop\myJava\AsigmntC#\View\bin\Debug\View.dll
 C:\Users\tan\Desktop\myJava\AsigmntC#\View\bin\Debug\View.pdb
-C:\Users\tan\Desktop\myJava\AsigmntC#\View\obj\Debug\View.csprojResolveAssemblyReference.cache
 C:\Users\tan\Desktop\myJava\AsigmntC#\View\obj\Debug\View.dll
 C:\Users\tan\Desktop\myJava\AsigmntC#\View\obj\Debug\View.pdb
+C:\Users\Tan\Desktop\myJava\AsigmntC#\View\obj\Debug\View.csprojResolveAssemblyReference.cache

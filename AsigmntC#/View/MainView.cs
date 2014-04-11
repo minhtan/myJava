@@ -152,17 +152,13 @@ namespace MainView
         public void showMatchListHeading()
         {
             insertEmptyLine();
-            insertLine();
-            insertEmptyLine();
-            insertEmptyLine();
             Console.WriteLine("=======================================Lich thi dau=======================================");
-            Console.WriteLine("| Stt | Doi 1              | Doi 2              | Thoi gian          | Dia diem           ");
             insertEmptyLine();
-            insertLine();
+            Console.WriteLine("| Stt | Doi 1              | Doi 2              | Thoi gian          | Dia diem           ");
             insertEmptyLine();
         }
 
-        public void showMatchListFooter()
+        public void showTableFooter()
         {
             insertEmptyLine();
             insertLine();
@@ -191,14 +187,20 @@ namespace MainView
 
         public string getMatchLocation()
         {
-            Console.Write("Nhap dia diem: ");
+            Console.Write("- Nhap dia diem: ");
             return getString();
         }
 
         public string getMatchTime()
         {
-            Console.Write("Nhap thoi gian: ");
+            Console.Write("- Nhap thoi gian: ");
             return getString();
+        }
+
+        public int getClubScore(string name)
+        {
+            Console.Write("- Nhap ket qua doi {0} : ", name);
+            return getInt();
         }
 
         public void editMatchHeading()
@@ -210,13 +212,35 @@ namespace MainView
 
         public int getMatchIndex()
         {
-            Console.Write("Nhap stt lich dau: ");
+            Console.Write("- Nhap stt lich dau: ");
             return getInt();
         }
 
         public void showMatchNotFoundMsg()
         {
             Console.WriteLine("Khong tim thay lich dau");
+        }
+
+        public void editScoreHeading()
+        {
+            insertEmptyLine();
+            Console.WriteLine("============Cap nhat ket qua tran dau============");
+            insertEmptyLine();
+        }
+
+        public void showStatsHeading()
+        {
+            insertEmptyLine();
+            Console.WriteLine("====================================Thong ke===========================================");
+            insertEmptyLine();
+            Console.WriteLine("| Ma doi         | Ten Doi               | Tran   | Thang  | Hoa    | Thua   | Diem    ");
+            insertEmptyLine();
+        
+        }
+
+        public void showStat(int i)
+        {
+            Console.Write("| {0, -7}", i);
         }
 
         //End Matches

@@ -1,0 +1,7 @@
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Control\bin\Release\Control.dll
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Control\bin\Release\Control.pdb
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Control\bin\Release\Models.dll
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Control\bin\Release\Models.pdb
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Control\obj\Release\Control.csprojResolveAssemblyReference.cache
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Control\obj\Release\Control.dll
+C:\Users\Tan\Desktop\myJava\AsigmntC#\Control\obj\Release\Control.pdb

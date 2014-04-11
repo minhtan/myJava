@@ -46,6 +46,15 @@ namespace Control
             return -1;
         }
 
+        public FootballClub getClubById(int id)
+        {
+            int i = getClubIndexById(id);
+            if (i != -1)
+                return clubs[i];
+            else
+                return null;
+        }
+
         public void sortClubsByName()
         {
             clubs = clubs.OrderBy(club => club.Name).ToList();

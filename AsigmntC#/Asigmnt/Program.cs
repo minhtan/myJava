@@ -18,6 +18,7 @@ namespace FootballManager
         static void Main(string[] args)
         {
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+          //  Console.SetWindowPosition(10, 10);
             Program prg = new Program();
             prg.clbMng = new ClubManager();
             prg.view = new View();
@@ -30,63 +31,82 @@ namespace FootballManager
         {
             int i;
             bool check = true;
-            view.showMainMenu();
-            do{
-                i = view.getInt();
-                switch (i)
+            while (true)
+            {
+                view.showMainMenu();
+                do
                 {
-                    case 0:
-                        Environment.Exit(0);
-                        check = false;
-                        break;
-                    case 1:
-                        clbManage();
-                        check = false;
-                        break;
-                    case 2:
-                        matchManage();
-                        check = false;
-                        break;
-                    default:
-                        break;
-                }
-                if (check)
-                    view.printChoice();
-            }while(check);
+                    i = view.getInt();
+                    switch (i)
+                    {
+                        case 0:
+                            Environment.Exit(0);
+                            check = false;
+                            break;
+                        case 1:
+                            clbManage();
+                            check = false;
+                            break;
+                        case 2:
+                            matchManage();
+                            check = false;
+                            break;
+                        case 3:
+                            editMatchScore();
+                            check = false;
+                            break;
+                        case 4:
+                            showStats();
+                            check = false;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (check)
+                        view.printChoice();
+                } while (check);
+            }
         }
 
         //Clubs
 
         private void clbManage()
         {
+            bool loop = true;
             int i;
             bool check = true;
-            view.showClubMenu();
-            do{
-                i = view.getInt();
-                switch(i){
-                    case 0:
-                        showMainMenu();
-                        check = false;
-                        break;
-                    case 1:
-                        viewClubList();
-                        check = false;
-                        break;
-                    case 2:
-                        editClub();
-                        check = false;
-                        break;
-                    case 3:
-                        createClub();
-                        check = false;
-                        break;
-                    default:
-                        break;
-                }
-                if (check)
-                    view.printChoice();
-            }while(check);
+            while (loop)
+            {
+                view.showClubMenu();
+                do
+                {
+                    i = view.getInt();
+                    switch (i)
+                    {
+                        case 0:
+                            check = false;
+                            loop = false;
+                            break;
+                        case 1:
+                            viewClubList();
+                            check = false;
+                            loop = false;
+                            break;
+                        case 2:
+                            editClub();
+                            check = false;
+                            break;
+                        case 3:
+                            createClub();
+                            check = false;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (check)
+                        view.printChoice();
+                } while (check);
+            }
         }
 
         private void editClub()
@@ -107,7 +127,6 @@ namespace FootballManager
                 }
             }
             while (view.confirmContinue());
-            clbManage();
         }
 
         private void createClub()
@@ -126,7 +145,6 @@ namespace FootballManager
                 clbMng.createClub(id, view.getClubName(), view.getClubCouch());
             } 
             while (view.confirmContinue());
-            clbManage();
         }
 
         private void viewClubList()
@@ -146,7 +164,6 @@ namespace FootballManager
                 i = view.getInt();
                 switch(i){
                     case 0:
-                        showMainMenu();
                         check = false;
                         break;
                     case 1:
@@ -184,37 +201,43 @@ namespace FootballManager
 
         private void matchManage()
         {
+            bool loop = true;
             int i;
             bool check = true;
-            view.showMatchMenu();
-            do{
-                i = view.getInt();
-                switch(i){
-                    case 0:
-                        showMainMenu();
-                        check = false;
-                        break;
-                    case 1:
-                        showMatchList();
-                        check = false;
-                        break;
-                    case 2:
-                        editMatch();
-                        check = false;
-                        break;
-                    case 3:
-                        createMatch();
-                        check = false;
-                        break;
-                    default:
-                        break;
-                }
-                if (check)
-                    view.printChoice();
-            }while(check);
+            while (loop)
+            {
+                view.showMatchMenu();
+                do
+                {
+                    i = view.getInt();
+                    switch (i)
+                    {
+                        case 0:
+                            check = false;
+                            loop = false;
+                            break;
+                        case 1:
+                            showMatchList();
+                            check = false;
+                            break;
+                        case 2:
+                            editMatch();
+                            check = false;
+                            break;
+                        case 3:
+                            createMatch();
+                            check = false;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (check)
+                        view.printChoice();
+                } while (check);
+            }
         }
 
-        public void createMatch()
+        private void createMatch()
         {
             do{
                 view.createMatchHeading();
@@ -235,10 +258,9 @@ namespace FootballManager
                 }
             }
             while (view.confirmContinue());
-            matchManage();
         }
 
-        public void editMatch()
+        private void editMatch()
         {
             int i;
             string time;
@@ -259,10 +281,9 @@ namespace FootballManager
                     view.showMatchNotFoundMsg();
                 }
             } while (view.confirmContinue());
-            matchManage();
         }
 
-        public void showMatchList()
+        private void showMatchList()
         {
             view.showMatchListHeading();
             for (int i = 0; i < mtchMng.Matches.Count; i++)
@@ -292,8 +313,79 @@ namespace FootballManager
                 view.showMathInfo(mtchMng.Matches[i].Location);
                 view.insertEmptyLine();
             }
-            view.showMatchListFooter();
-            matchManage();
+            view.showTableFooter();
+        }
+
+        private void editMatchScore()
+        {
+            int i;
+            int score1;
+            int score2;
+            int clubId;
+            FootballClub club1;
+            FootballClub club2;
+            showMatchList();
+            view.editScoreHeading();
+            do
+            {
+                view.editMatchHeading();
+                i = view.getMatchIndex();
+                if (i >= 0 && i < mtchMng.Matches.Count)
+                {
+                    clubId = mtchMng.Matches[i].Club1Id;
+                    club1 = clbMng.getClubById(clubId);
+                    score1 = view.getClubScore(club1.Name);
+
+                    clubId = mtchMng.Matches[i].Club2Id;
+                    club2 = clbMng.getClubById(clubId);
+                    score2 = view.getClubScore(club2.Name);
+
+                    if (view.confirmEdit())
+                    {
+                        mtchMng.editScore(i, score1, score2);
+                        club1.MatchTotal++;
+                        club2.MatchTotal++;
+                        if (score1 > score2)
+                            club1.MatchWon++;
+                        else if (score1 < score2)
+                            club2.MatchWon++;
+                        else
+                        {
+                            club1.MatchDraw++;
+                            club2.MatchDraw++;
+                        }
+                    }
+                }
+                else
+                {
+                    view.showMatchNotFoundMsg();
+                }
+            } while (view.confirmContinue()); 
+        }
+
+        private void showStats()
+        {
+            int i;
+            FootballClub club;
+            view.showStatsHeading();
+            for (i = 0; i < clbMng.Clubs.Count; i++)
+            {
+                club = clbMng.getClub(i);
+                view.showClubId(club.Id);
+                view.showClubName(club.Name);
+                view.showStat(club.MatchTotal);
+                view.showStat(club.MatchWon);
+                view.showStat(club.MatchDraw);
+                view.showStat(club.MatchTotal - (club.MatchDraw + club.MatchWon));
+                view.showStat(scoreCal(club.MatchWon, club.MatchDraw));
+                view.insertEmptyLine();
+            }
+            view.showTableFooter();
+        }
+
+        private int scoreCal(int won, int draw)
+        {
+            return won * 3 + draw * 1;
         }
 
         //End Matches

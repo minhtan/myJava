@@ -10,6 +10,7 @@ namespace Models
     {
         private int matchTotal;
         private int matchWon;
+        private int matchDraw;
         private int id;
         private string name;
         private string couch;
@@ -44,10 +45,19 @@ namespace Models
             set { matchWon = value; }
         }
 
+        public int MatchDraw
+        {
+            get { return matchDraw; }
+            set { matchDraw = value;  }
+        }
+
         public FootballClub(int id, string name, string couch){
             Id = id;
             Name = name;
             Couch = couch;
+            MatchTotal = 0;
+            MatchWon = 0;
+            MatchDraw = 0;
         }
     }
 }
