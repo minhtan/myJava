@@ -1,0 +1,4 @@
+D:\OneDrive\VS\Asigmnt\Models\bin\Debug\Model.dll
+D:\OneDrive\VS\Asigmnt\Models\bin\Debug\Model.pdb
+D:\OneDrive\VS\Asigmnt\Models\obj\Debug\Model.dll
+D:\OneDrive\VS\Asigmnt\Models\obj\Debug\Model.pdb
