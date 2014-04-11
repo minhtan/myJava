@@ -12,3 +12,10 @@ D:\OneDrive\VS\Asigmnt\Control\obj\Debug\Control.dll
 D:\OneDrive\VS\Asigmnt\Control\obj\Debug\Control.pdb
 D:\OneDrive\VS\Asigmnt\Control\bin\Debug\Models.dll
 D:\OneDrive\VS\Asigmnt\Control\bin\Debug\Models.pdb
+C:\Users\tan\Desktop\myJava\AsigmntC#\Control\bin\Debug\Control.dll
+C:\Users\tan\Desktop\myJava\AsigmntC#\Control\bin\Debug\Control.pdb
+C:\Users\tan\Desktop\myJava\AsigmntC#\Control\bin\Debug\Models.dll
+C:\Users\tan\Desktop\myJava\AsigmntC#\Control\bin\Debug\Models.pdb
+C:\Users\tan\Desktop\myJava\AsigmntC#\Control\obj\Debug\Control.csprojResolveAssemblyReference.cache
+C:\Users\tan\Desktop\myJava\AsigmntC#\Control\obj\Debug\Control.dll
+C:\Users\tan\Desktop\myJava\AsigmntC#\Control\obj\Debug\Control.pdb

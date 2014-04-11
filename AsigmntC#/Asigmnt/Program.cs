@@ -17,6 +17,7 @@ namespace FootballManager
 
         static void Main(string[] args)
         {
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
             Program prg = new Program();
             prg.clbMng = new ClubManager();
             prg.view = new View();
@@ -194,7 +195,7 @@ namespace FootballManager
                         check = false;
                         break;
                     case 1:
-                        
+                        showMatchList();
                         check = false;
                         break;
                     case 2:
@@ -240,22 +241,30 @@ namespace FootballManager
         public void editMatch()
         {
             int i;
+            string time;
+            string location;
             do
             {
                 view.editMatchHeading();
-                do{
-                    i = view.getMatchIndex();
-                }while(i<0 || i>=mtchMng.Matches.Count);
-                if (view.confirmEdit())
-                    mtchMng.editMatch(i, view.getMatchTime(), view.getMatchLocation());
-            }
-            while (view.confirmContinue());
+                i = view.getMatchIndex();
+                if (i >= 0 && i < mtchMng.Matches.Count)
+                {
+                    time = view.getMatchTime();
+                    location = view.getMatchLocation();
+                    if (view.confirmEdit())
+                        mtchMng.editMatch(i, time, location);
+                }
+                else
+                {
+                    view.showMatchNotFoundMsg();
+                }
+            } while (view.confirmContinue());
             matchManage();
         }
 
         public void showMatchList()
         {
-            view.showClubListHeading();
+            view.showMatchListHeading();
             for (int i = 0; i < mtchMng.Matches.Count; i++)
             {
                 view.showMatchId(i);
@@ -279,9 +288,12 @@ namespace FootballManager
                         mtchMng.Matches[i].Club2_score
                     );
                 }
-
+                view.showMathInfo(mtchMng.Matches[i].Time);
+                view.showMathInfo(mtchMng.Matches[i].Location);
                 view.insertEmptyLine();
             }
+            view.showMatchListFooter();
+            matchManage();
         }
 
         //End Matches

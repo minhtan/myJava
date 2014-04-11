@@ -154,8 +154,16 @@ namespace MainView
             insertEmptyLine();
             insertLine();
             insertEmptyLine();
-            Console.WriteLine("========================================Lich thi dau======================================");
+            insertEmptyLine();
+            Console.WriteLine("=======================================Lich thi dau=======================================");
             Console.WriteLine("| Stt | Doi 1              | Doi 2              | Thoi gian          | Dia diem           ");
+            insertEmptyLine();
+            insertLine();
+            insertEmptyLine();
+        }
+
+        public void showMatchListFooter()
+        {
             insertEmptyLine();
             insertLine();
             insertEmptyLine();
@@ -204,6 +212,11 @@ namespace MainView
         {
             Console.Write("Nhap stt lich dau: ");
             return getInt();
+        }
+
+        public void showMatchNotFoundMsg()
+        {
+            Console.WriteLine("Khong tim thay lich dau");
         }
 
         //End Matches

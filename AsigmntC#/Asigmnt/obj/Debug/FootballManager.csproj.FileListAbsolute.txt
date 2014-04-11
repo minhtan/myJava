@@ -16,3 +16,15 @@ D:\OneDrive\VS\Asigmnt\Asigmnt\bin\Debug\View.dll
 D:\OneDrive\VS\Asigmnt\Asigmnt\bin\Debug\Control.pdb
 D:\OneDrive\VS\Asigmnt\Asigmnt\bin\Debug\Models.pdb
 D:\OneDrive\VS\Asigmnt\Asigmnt\bin\Debug\View.pdb
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Debug\Asigmnt.exe.config
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\obj\Debug\Asigmnt.exe
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\obj\Debug\Asigmnt.pdb
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Debug\Asigmnt.exe
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Debug\Asigmnt.pdb
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Debug\Control.dll
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Debug\Models.dll
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Debug\View.dll
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Debug\Control.pdb
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Debug\Models.pdb
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\bin\Debug\View.pdb
+C:\Users\tan\Desktop\myJava\AsigmntC#\Asigmnt\obj\Debug\FootballManager.csprojResolveAssemblyReference.cache
